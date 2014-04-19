@@ -1,7 +1,7 @@
 PM_MIDI2OSCChannel {
-    classvar midiChannels;
-    classvar midiMsgTypes;
-    classvar midiNonNumTypes;
+    classvar <midiChannels;
+    classvar <midiMsgTypes;
+    classvar <midiNonNumTypes;
     classvar midiSrcIDs;
     classvar <controller;
 
