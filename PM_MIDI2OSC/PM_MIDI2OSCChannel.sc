@@ -159,6 +159,26 @@ PM_MIDI2OSCChannel {
         ^this;
     }
 
+    midiSrcID_ {|aMidiSrcID|
+        if(MIDIClient.initialized.not) {
+            this.class.midiSrcIDs;
+            ^this;
+        };
+
+        if(this.class.midiSrcIDs.includes(aMidiSrcID).not) {
+            this.error(
+                "Invalid MIDI source ID" ++ Char.nl
+                ++ "should be a symbol, one of:" ++ Char.nl
+                ++ Char.tab ++ this.class.midiSrcIDs
+            );
+            ^this;
+        };
+
+        midiSrcID = aMidiSrcID;
+
+        ^this;
+    }
+
     error {|string|
         if(controller.notNil) {
             controller.error(string);
