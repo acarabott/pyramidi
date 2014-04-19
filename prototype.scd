@@ -4,10 +4,14 @@ thisProcess.openUDPPort(6666);
 n = NetAddr("127.0.0.1", 6666)
 
 OSCdef(\hello, {|msg, time, addr, recvPort|
-	Post << "playing note: " << msg[1] << Char.nl;
+	var len = 15;
+	Post << "----------------------------------" << Char.nl
+		 << "noteOn " << Char.nl
+		 << "-------" << Char.nl
+		 << "from:".padRight(len) << addr.ip << ":" << addr.port << Char.nl
+		 << "note:".padRight(len) << msg[1] << Char.nl
+		 << "velocity:".padRight(len) << msg[2] << Char.nl;
 }, '/noteOn');
-
-~channels = IdentityDictionary();
 
 ~channel = IdentityDictionary[];
 ~channel['midiChans'] = [nil] ++ (0..15);
@@ -63,17 +67,21 @@ OSCdef(\hello, {|msg, time, addr, recvPort|
 					~channels.removeAt(that['name'].asSymbol);
 					that['name'] = name;
 					~channels[symName] = that;
-
-					that;
 				};
+
+				that;
 			};
 
 			that['enable'] = {
 				that['enabled'] = true;
+
+				that;
 			};
 
 			that['disable'] = {
 				that['enabled'] = false;
+
+				that;
 			};
 
 			that['setMidiParam'] = {|paramKey, lookupKey, value|
@@ -88,6 +96,8 @@ OSCdef(\hello, {|msg, time, addr, recvPort|
 
 					that[paramKey] = value;
 				};
+
+				that;
 			};
 
 			that['setMidiChan'] = {|midiChan|
@@ -114,9 +124,9 @@ OSCdef(\hello, {|msg, time, addr, recvPort|
 					};
 
 					that['netAddr'] = NetAddr(ip, port);
+				};
 
-					nil;
-				}
+				that;
 			};
 
  			// private
@@ -148,24 +158,25 @@ OSCdef(\hello, {|msg, time, addr, recvPort|
 					if(~channel['midiNonNumTypes'].includes(that['midiMsgType'])) {
 						func = {|val, chan, src|
 							if(that['enabled']) {
-								Post << "received:\t" << that['midiMsgType'].asString
-									 << Char.nl
-									 << "on channel:\t" << chan << Char.nl
-									 << "from ID:\t" << src << Char.nl
-									 << Char.nl;
-								// that['netAddr'].sendMsg(oscAddr, val);
+								// Post << "received:\t" << that['midiMsgType'].asString
+								// 	 << Char.nl
+								// 	 << "on channel:\t" << chan << Char.nl
+								// 	 << "from ID:\t" << src << Char.nl
+								// 	 << Char.nl;
+								that['netAddr'].sendMsg(oscAddr, val);
 							};
 						};
 					} {
 						func = {|val, num, chan, src|
 							if(that['enabled']) {
-								Post << "received:\t" << that['midiMsgType'].asString
-									 << Char.nl
-									 << "with value:\t" << val<< Char.nl
-									 << "on channel:\t" << chan << Char.nl
-									 << "from ID:\t" << src
-									 << Char.nl;
-								// that['netAddr'].sendMsg(oscAddr, num, val);
+								// Post << "received:\t" << that['midiMsgType'].asString
+								// 	 << Char.nl
+								// 	 << "with value:\t" << val<< Char.nl
+								// 	 << "on channel:\t" << chan << Char.nl
+								// 	 << "from ID:\t" << src
+								// 	 << Char.nl;
+
+								that['netAddr'].sendMsg(oscAddr, num, val);
 							};
 						};
 					};
@@ -178,8 +189,17 @@ OSCdef(\hello, {|msg, time, addr, recvPort|
 					);
 				};
 
+				that;
+
 			};
 
+			that['free'] = {
+				that['midiFunc'].free;
+				that['netAddr'].disconnect;
+				that.free;
+
+				that;
+			};
 
 			~channels[name.asSymbol] = that;
 		};
@@ -190,7 +210,6 @@ OSCdef(\hello, {|msg, time, addr, recvPort|
 	that;
 };
 )
-
 
 ~channels = IdentityDictionary();
 i = ~addDevice.("piano", true);
@@ -205,3 +224,4 @@ i['setMidiSrcID'].(
 i['addMidiFunc'].();
 
 i['disable'].();
+i['enable'].();
