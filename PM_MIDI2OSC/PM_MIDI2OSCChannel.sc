@@ -3,7 +3,7 @@ PM_MIDI2OSCChannel {
     classvar <midiMsgTypes;
     classvar <midiNonNumTypes;
     classvar midiSrcIDs;
-    classvar <controller;
+    classvar <controllerMethods;
 
     var <name;
     var <enabled;
@@ -14,7 +14,7 @@ PM_MIDI2OSCChannel {
     var <midiMsgType;
     var <midiSrcID;
 
-    var <>controller;
+    var <controller;
 
     /*
     ==============
@@ -33,6 +33,8 @@ PM_MIDI2OSCChannel {
         ];
 
         midiNonNumTypes = #[\touch, \program, \bend];
+
+        controllerMethods = #[\error, \warning];
     }
 
     *new {|aName|
@@ -53,19 +55,11 @@ PM_MIDI2OSCChannel {
         ^midiSrcIDs.copy;
     }
 
-    *addController {|aController|
-        controller = aController;
-    }
-
-    *error {|string|
-        if(controller.notNil) {
-            controller.error(string);
-        } {
-            Post << "----------------------------------" << Char.nl
-                 << "ERROR:" << Char.nl
-                 << $\t << string.tr(Char.nl, Char.nl ++ Char.tab)
-                 << Char.nl;
-        };
+    *printMessage {|type, string|
+        Post << "----------------------------------" << Char.nl
+             << type << ":" << Char.nl
+             << $\t << string.tr(Char.nl, Char.nl ++ Char.tab)
+             << Char.nl;
     }
 
     /*
@@ -88,11 +82,11 @@ PM_MIDI2OSCChannel {
 
     name_ {|aName|
         if(aName.isString.not) {
-            this.error("name is not a string");
+            this.notify(\error, "name is not a string");
             ^this;
         };
         if(aName.isEmpty) {
-            this.error("name is empty");
+            this.notify(\error, "name is empty");
             ^this;
         };
         if(aName.asSymbol == name.asSymbol) {
@@ -106,7 +100,7 @@ PM_MIDI2OSCChannel {
 
     enabled_ {|aEnabled|
         if(aEnabled.isKindOf(Boolean).not) {
-            this.error("Not a boolean");
+            this.notify(\error, "Not a boolean");
             ^this;
         };
 
@@ -114,13 +108,63 @@ PM_MIDI2OSCChannel {
         ^this;
     }
 
+    createNetAddr {|ip, port|
+        // validate IP
+        if(ip.isString.not) {
+            this.notify(\error, "IP address is not a string");
+            ^netAddr;
+        };
+        try {
+            ip.gethostbyname;
+        } {|error|
+            this.notify(\error,
+                "invalid ip address:" ++ Char.nl
+                ++ Char.tab ++ ip
+            );
+            ^netAddr;
+        };
+
+        // validate port
+        if(port.isInteger.not) {
+            this.notify(\error, "port is not an integer");
+            ^netAddr;
+        };
+
+        // check existing
+        if(netAddr.notNil) {
+            // check redundant call
+            if(ip.asSymbol == netAddr.ip.asSymbol && (port == netAddr.port)) {
+                this.notify(\warning,
+                    "same ip and port specified, nothing changed"
+                );
+                ^netAddr;
+            };
+
+            // kill old one
+            netAddr.disconnect;
+        };
+
+        // create
+        netAddr = NetAddr(ip, port);
+
+        ^netAddr;
+    }
+
+    ip {
+        ^netAddr.ip;
+    }
+
+    port {
+        ^netAddr.port;
+    }
+
     latency_ {|aLatency|
         if(aLatency.isNumber.not) {
-            this.error("Latency must be a number");
+            this.notify(\error, "Latency must be a number");
             ^this;
         };
         if(aLatency < 0) {
-            this.error("Latency must be greater than 0");
+            this.notify(\error, "Latency must be greater than 0");
             ^this;
         };
 
@@ -131,7 +175,7 @@ PM_MIDI2OSCChannel {
 
     midiChannel_ {|aMidiChannel|
         if(this.class.midiChannels.includes(aMidiChannel).not) {
-            this.error(
+            this.notify(\error,
                 "Invalid MIDI channel" ++ Char.nl
                 ++ "should be one of:" ++ Char.nl
                 ++ Char.tab ++ this.class.midiChannels
@@ -146,7 +190,7 @@ PM_MIDI2OSCChannel {
 
     midiMsgType_ {|aMidiMsgType|
         if(this.class.midiMsgTypes.includes(aMidiMsgType).not) {
-            this.error(
+            this.notify(\error,
                 "Invalid MIDI message type" ++ Char.nl
                 ++ "should be a symbol, one of:" ++ Char.nl
                 ++ Char.tab ++ this.class.midiMsgTypes
@@ -166,7 +210,7 @@ PM_MIDI2OSCChannel {
         };
 
         if(this.class.midiSrcIDs.includes(aMidiSrcID).not) {
-            this.error(
+            this.notify(\error,
                 "Invalid MIDI source ID" ++ Char.nl
                 ++ "should be a symbol, one of:" ++ Char.nl
                 ++ Char.tab ++ this.class.midiSrcIDs
@@ -179,11 +223,33 @@ PM_MIDI2OSCChannel {
         ^this;
     }
 
-    error {|string|
+    controller_ {|aController|
+        if(this.class.controllerMethods.every (aController.respondsTo(_)).not) {
+            this.notify(\error,
+                "controller doesn't respond to one of:" ++ Char.nl
+                ++ Char.tab ++ this.class.controllerMethods;
+            );
+            ^this;
+        };
+
+        controller = aController;
+        ^this;
+    }
+
+    notify {|type, string|
         if(controller.notNil) {
-            controller.error(string);
+            if(controller.respondsTo(type)) {
+                controller.perform(type, string);
+            } {
+                controller.error(
+                    "controller doesn't respond to type:" ++ Char.nl
+                    ++ Char.tab ++ type.asString
+                );
+                controller.error(string);
+            };
         } {
-            this.class.error(string);
+            this.class.printMessage(type.asString.toUpper, string);
         };
     }
 }
+

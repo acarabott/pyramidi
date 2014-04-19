@@ -7,15 +7,21 @@ PM_MIDI2OSCController {
     }
 
     midi2oscControllerInit {
-        PM_MIDI2OSCController.addController(this);
     }
 
     error {|string|
-        Post << "----------------------------------" << Char.nl
-             << "ERROR:" << Char.nl
+        this.printMessage("ERROR", string);
+        // TODO implement error on view, if no view, print
+    }
+
+    warning {|string|
+        this.printMessage("WARNING", string);
+    }
+
+    printMessage {|type, string|
+        Post << "------------Controller------------" << Char.nl
+             << type << ":" << Char.nl
              << $\t << string.tr(Char.nl, Char.nl ++ Char.tab)
              << Char.nl;
-
-        // TODO implement error on view, if no view, print
     }
 }
