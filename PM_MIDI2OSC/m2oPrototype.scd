@@ -16,7 +16,6 @@ OSCdef(\hello, {|msg, time, addr, recvPort|
 ~channel = IdentityDictionary[];
 ~channel['midiChans'] = [nil] ++ (0..15);
 ~channel['midiMsgTypes'] = MIDIFunc.defaultDispatchers.keys.asArray;
-~channel['midiSrcs'] = MIDIClient.sources
 ~channel['midiSrcIDs'] = [nil] ++ MIDIClient.sources.collect (_.uid);
 ~channel['midiNonNumTypes'] = [\touch, \program, \bend];
 
