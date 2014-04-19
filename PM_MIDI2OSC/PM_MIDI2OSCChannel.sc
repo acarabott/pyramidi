@@ -8,7 +8,7 @@ PM_MIDI2OSCChannel {
     classvar <controller;
 
     var <name;
-    var <enabled;
+    var <>enabled;
     var netAddr;
     var <latency;
     var midiFunc;
