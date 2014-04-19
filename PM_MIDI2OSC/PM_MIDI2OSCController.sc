@@ -1,38 +1,21 @@
 PM_MIDI2OSCController {
-	classvar controllers;
+    *initClass {
+    }
 
-	*initClass {
-		controllers = List[];
-	}
+    *new {
+        ^super.new.midi2oscControllerInit;
+    }
 
-	*new {
-		^super.new.midi2oscControllerInit;
-	}
+    midi2oscControllerInit {
+        PM_MIDI2OSCController.addController(this);
+    }
 
-	*addController {|controller|
-		controllers.add(controller);
-	}
+    error {|string|
+        string =  "----------------------------------" ++ Char.nl
+               ++ "ERROR:" ++ Char.nl
+               ++ $\t ++ string ++ Char.nl;
 
-	midi2oscControllerInit {
-		PM_MIDI2OSCController.addController(this);
-	}
-
-	*displayError {|string|
-
-		string =  "----------------------------------" ++ Char.nl
-			   ++ "ERROR:" ++ Char.nl
-			   ++ $\t ++ string ++ Char.nl;
-
-		if(controllers.size > 0) {
-			controllers.do {|controller|
-				controller.displayError(string);
-			}
-		} {
-			string.postln;
-		};
-	}
-
-	displayError {|string|
-		string.postln;
-	}
+        // TODO implement error on view
+        string.postln;
+    }
 }
