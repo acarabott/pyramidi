@@ -1,9 +1,7 @@
 PM_MIDI2OSCChannel {
-    classvar midiChannels = #[nil, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
-                              14, 15];
-    classvar midiMsgTypes = #[  \touch, \sysex, \polytouch, \control, \noteOff,
-                                \program, \noteOn, \bend, \sysrt ];
-    classvar midiNonNumTypes = #[\touch, \program, \bend];
+    classvar midiChannels;
+    classvar midiMsgTypes;
+    classvar midiNonNumTypes;
     classvar midiSrcIDs;
     classvar <controller;
 
@@ -25,6 +23,16 @@ PM_MIDI2OSCChannel {
     */
 
     *initClass {
+        midiChannels = #[
+            nil, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
+        ];
+
+        midiMsgTypes = #[
+            \touch, \sysex, \polytouch, \control, \noteOff, \program, \noteOn,
+            \bend, \sysrt
+        ];
+
+        midiNonNumTypes = #[\touch, \program, \bend];
     }
 
     *new {|aName|
