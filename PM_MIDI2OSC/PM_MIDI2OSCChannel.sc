@@ -131,7 +131,7 @@ PM_MIDI2OSCChannel {
     midiChannel_ {|aMidiChannel|
         if(this.class.midiChannels.includes(aMidiChannel).not) {
             this.error(
-                "Invald MIDI channel" ++ Char.nl
+                "Invalid MIDI channel" ++ Char.nl
                 ++ "should be one of" ++ this.class.midiChannels
             );
             ^this;
@@ -145,7 +145,7 @@ PM_MIDI2OSCChannel {
     midiMsgType_ {|aMidiMsgType|
         if(this.class.midiMsgTypes.includes(aMidiMsgType).not) {
             this.error(
-                "Invald MIDI message type" ++ Char.nl
+                "Invalid MIDI message type" ++ Char.nl
                 ++ "should be a symbol, one of" ++ this.class.midiMsgTypes
             );
             ^this;
