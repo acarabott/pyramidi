@@ -103,6 +103,21 @@ PM_MIDI2OSCChannel {
         ^this;
     }
 
+    latency_ {|aLatency|
+        if(aLatency.isNumber.not) {
+            this.error("Latency must be a number");
+            ^this;
+        };
+        if(aLatency < 0) {
+            this.error("Latency must be greater than 0");
+            ^this;
+        };
+
+        latency = aLatency;
+
+        ^this;
+    }
+
     error {|string|
         if(controller.notNil) {
             controller.error(string);
