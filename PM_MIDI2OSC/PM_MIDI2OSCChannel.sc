@@ -129,6 +129,20 @@ PM_MIDI2OSCChannel {
         ^this;
     }
 
+    midiChannel_ {|aMidiChannel|
+        if(this.class.midiChannels.includes(aMidiChannel).not) {
+            this.error(
+                "Invald MIDI channel" ++ Char.nl
+                ++ "should be one of" ++ this.class.midiChannels
+            );
+            ^this;
+        };
+
+        midiChannel = aMidiChannel;
+
+        ^this;
+    }
+
     error {|string|
         if(controller.notNil) {
             controller.error(string);
