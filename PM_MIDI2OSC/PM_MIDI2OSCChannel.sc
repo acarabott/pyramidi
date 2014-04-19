@@ -79,9 +79,9 @@ PM_MIDI2OSCChannel {
         netAddr =       nil;
         latency =       0.0;
         midiFunc =      nil;
-        midiChannel =   -1; // nil would respond to all
+        midiChannel =   \unset; // nil would respond to all
         midiMsgType =   nil;
-        midiSrcID =     -1; // nil would respond to all
+        midiSrcID =     \unset; // nil would respond to all
         controller =    nil;
     }
 
