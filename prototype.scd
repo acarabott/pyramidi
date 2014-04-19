@@ -42,6 +42,7 @@ OSCdef(\hello, {|msg, time, addr, recvPort|
 			that['midiChan'] = -1; // nil responds to all
 			that['midiMsgType'];
 			that['midiSrcID'] = -1; // nil responds to all
+			that['latency'] = 0;
 
 			// Public
 			that['setName'] = {|name|
@@ -82,6 +83,23 @@ OSCdef(\hello, {|msg, time, addr, recvPort|
 				that['enabled'] = false;
 
 				that;
+			};
+
+			that['setLatency'] = {|latency|
+				block {|break|
+					if(latency.isNumber.not) {
+						Post << "ERROR:" << Char.nl
+							 << "Latency must be a number" << Char.nl;
+						break.();
+					};
+					if(latency < 0) {
+						Post << "ERROR:" << Char.nl
+							 << "Latency must be greater than 0" << Char.nl;
+						break.();
+					};
+
+					that['latency'] = latency;
+				};
 			};
 
 			that['setMidiParam'] = {|paramKey, lookupKey, value|
@@ -163,7 +181,9 @@ OSCdef(\hello, {|msg, time, addr, recvPort|
 								// 	 << "on channel:\t" << chan << Char.nl
 								// 	 << "from ID:\t" << src << Char.nl
 								// 	 << Char.nl;
-								that['netAddr'].sendMsg(oscAddr, val);
+								SystemClock.sched(that['latency'], {
+									that['netAddr'].sendMsg(oscAddr, val);
+								});
 							};
 						};
 					} {
@@ -175,8 +195,9 @@ OSCdef(\hello, {|msg, time, addr, recvPort|
 								// 	 << "on channel:\t" << chan << Char.nl
 								// 	 << "from ID:\t" << src
 								// 	 << Char.nl;
-
-								that['netAddr'].sendMsg(oscAddr, num, val);
+								SystemClock.sched(that['latency'], {
+									that['netAddr'].sendMsg(oscAddr, num, val);
+								});
 							};
 						};
 					};
@@ -222,6 +243,6 @@ i['setMidiSrcID'].(
 	}[0].uid
 );
 i['addMidiFunc'].();
-
 i['disable'].();
 i['enable'].();
+i['setLatency'].(0.5)
