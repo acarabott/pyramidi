@@ -6,7 +6,7 @@ PM_MIDI2OSCChannel {
     classvar <controller;
 
     var <name;
-    var <>enabled;
+    var <enabled;
     var netAddr;
     var <latency;
     var midiFunc;
@@ -100,6 +100,16 @@ PM_MIDI2OSCChannel {
 
         name = aName;
 
+        ^this;
+    }
+
+    enabled_ {|aEnabled|
+        if(aEnabled.isKindOf(Boolean).not) {
+            this.error("Not a boolean");
+            ^this;
+        };
+
+        enabled = aEnabled;
         ^this;
     }
 
