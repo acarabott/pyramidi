@@ -63,7 +63,8 @@ PM_MIDI2OSCChannel {
         } {
             Post << "----------------------------------" << Char.nl
                  << "ERROR:" << Char.nl
-                 << $\t << string << Char.nl;
+                 << $\t << string.tr(Char.nl, Char.nl ++ Char.tab)
+                 << Char.nl;
         };
     }
 
@@ -132,7 +133,8 @@ PM_MIDI2OSCChannel {
         if(this.class.midiChannels.includes(aMidiChannel).not) {
             this.error(
                 "Invalid MIDI channel" ++ Char.nl
-                ++ "should be one of" ++ this.class.midiChannels
+                ++ "should be one of:" ++ Char.nl
+                ++ Char.tab ++ this.class.midiChannels
             );
             ^this;
         };
@@ -146,7 +148,8 @@ PM_MIDI2OSCChannel {
         if(this.class.midiMsgTypes.includes(aMidiMsgType).not) {
             this.error(
                 "Invalid MIDI message type" ++ Char.nl
-                ++ "should be a symbol, one of" ++ this.class.midiMsgTypes
+                ++ "should be a symbol, one of:" ++ Char.nl
+                ++ Char.tab ++ this.class.midiMsgTypes
             );
             ^this;
         };

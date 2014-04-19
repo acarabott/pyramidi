@@ -13,7 +13,8 @@ PM_MIDI2OSCController {
     error {|string|
         Post << "----------------------------------" << Char.nl
              << "ERROR:" << Char.nl
-             << $\t << string << Char.nl;
+             << $\t << string.tr(Char.nl, Char.nl ++ Char.tab)
+             << Char.nl;
 
         // TODO implement error on view, if no view, print
     }
