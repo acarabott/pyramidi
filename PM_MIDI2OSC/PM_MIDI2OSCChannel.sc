@@ -143,6 +143,20 @@ PM_MIDI2OSCChannel {
         ^this;
     }
 
+    midiMsgType_ {|aMidiMsgType|
+        if(this.class.midiMsgTypes.includes(aMidiMsgType).not) {
+            this.error(
+                "Invald MIDI message type" ++ Char.nl
+                ++ "should be a symbol, one of" ++ this.class.midiMsgTypes
+            );
+            ^this;
+        };
+
+        midiMsgType = aMidiMsgType;
+
+        ^this;
+    }
+
     error {|string|
         if(controller.notNil) {
             controller.error(string);
