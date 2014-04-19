@@ -11,11 +11,10 @@ PM_MIDI2OSCController {
     }
 
     error {|string|
-        string =  "----------------------------------" ++ Char.nl
-               ++ "ERROR:" ++ Char.nl
-               ++ $\t ++ string ++ Char.nl;
+        Post << "----------------------------------" << Char.nl
+             << "ERROR:" << Char.nl
+             << $\t << string << Char.nl;
 
-        // TODO implement error on view
-        string.postln;
+        // TODO implement error on view, if no view, print
     }
 }

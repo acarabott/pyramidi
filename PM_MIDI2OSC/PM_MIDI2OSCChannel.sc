@@ -41,6 +41,7 @@ PM_MIDI2OSCChannel {
 
     *midiSrcIDs {
         if(MIDIClient.initialized.not) {
+            // TODO check this doesn't need this, if it will even work..
             error("MIDIClient is not initialised, do MIDIClient.init;");
 
             ^[];
@@ -61,9 +62,9 @@ PM_MIDI2OSCChannel {
         if(controller.notNil) {
             controller.error(string);
         } {
-            Post << "----------------------------------" ++ Char.nl
-                 ++ "ERROR:" ++ Char.nl
-                 ++ $\t ++ string ++ Char.nl;
+            Post << "----------------------------------" << Char.nl
+                 << "ERROR:" << Char.nl
+                 << $\t << string << Char.nl;
         };
     }
 
