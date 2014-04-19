@@ -41,8 +41,7 @@ PM_MIDI2OSCChannel {
 
     *midiSrcIDs {
         if(MIDIClient.initialized.not) {
-            // TODO check this doesn't need this, if it will even work..
-            error("MIDIClient is not initialised, do MIDIClient.init;");
+            this.error("MIDIClient is not initialised, do MIDIClient.init;");
 
             ^[];
         } {
