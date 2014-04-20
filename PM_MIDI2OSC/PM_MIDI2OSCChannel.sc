@@ -154,11 +154,11 @@ PM_MIDI2OSCChannel {
     }
 
     midiChannel_ {|aMidiChannel|
-        if(this.class.midiChannels.includes(aMidiChannel).not) {
+        if(midiChannels.includes(aMidiChannel).not) {
             this.notify(\error, \midiChannel,
                 "Invalid MIDI channel" ++ Char.nl
                 ++ "should be one of:" ++ Char.nl
-                ++ Char.tab ++ this.class.midiChannels
+                ++ Char.tab ++ midiChannels
             );
             ^this;
         };
@@ -173,11 +173,11 @@ PM_MIDI2OSCChannel {
     }
 
     midiMsgType_ {|aMidiMsgType|
-        if(this.class.midiMsgTypes.includes(aMidiMsgType).not) {
+        if(midiMsgTypes.includes(aMidiMsgType).not) {
             this.notify(\error, \midiMsgType,
                 "Invalid MIDI message type" ++ Char.nl
                 ++ "should be a symbol, one of:" ++ Char.nl
-                ++ Char.tab ++ this.class.midiMsgTypes
+                ++ Char.tab ++ midiMsgTypes
             );
             ^this;
         };
