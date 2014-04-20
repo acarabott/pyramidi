@@ -149,36 +149,61 @@ PM_MIDI2OSCChannel {
         ^midiSrcLabels.copy;
     }
 
-    createNetAddr {|ip, port|
-        // validate IP
-        if(ip.isString.not) {
+    ip {
+        if(netAddr.isNil) {
+            ^nil;
+        };
+        ^netAddr.ip;
+    }
+
+    ip_ {|aIp|
+        if(aIp.isString.not) {
             this.notify(\error, \ip,
                 "IP address is not a string"
             );
-            ^netAddr;
+            ^this.ip;
         };
         try {
-            ip.gethostbyname;
+            aIp.gethostbyname;
         } {|error|
             this.notify(\error, \ip,
                 "invalid ip address:" ++ Char.nl
-                ++ Char.tab ++ ip
+                ++ Char.tab ++ aIp
             );
-            ^netAddr;
+            ^this.ip;
         };
 
+        this.createNetAddr(aIp, this.port);
+
+        ^this.ip;
+    }
+
+    port {
+        if(netAddr.isNil) {
+            ^nil;
+        };
+        ^netAddr.port;
+    }
+
+    port_ {|aPort|
         // validate port
-        if(port.isInteger.not) {
+        if(aPort.isInteger.not) {
             this.notify(\error, \port,
                 "port is not an integer"
             );
-            ^netAddr;
+            ^this.port;
         };
 
+        this.createNetAddr(this.ip, aPort);
+
+        ^this.port;
+    }
+
+    createNetAddr {|aIp, aPort|
         // check existing
         if(netAddr.notNil) {
             // check redundant call
-            if(ip.asSymbol == netAddr.ip.asSymbol && (port == netAddr.port)) {
+            if(aIp.asSymbol == netAddr.ip.asSymbol && (aPort == netAddr.port)) {
                 this.notify(\warning, \netAddr,
                     "same ip and port specified, nothing changed"
                 );
@@ -189,20 +214,24 @@ PM_MIDI2OSCChannel {
             netAddr.disconnect;
         };
 
-        // create
-        netAddr = NetAddr(ip, port);
+        if(aIp.isNil) {
+            this.notify(\error, \ip,
+                "IP address not set, using default"
+            );
+        };
+        if(aPort.isNil) {
+            this.notify(\error, \port,
+                "Port not set, using default"
+            );
+        };
+        netAddr = NetAddr(aIp, aPort);
+
+        this.notify(\debug, nil,
+            "Channel:" + name ++ Char.nl
+            ++ Char.tab ++ "SET: netAddr:" + netAddr
+        );
 
         ^netAddr;
-    }
-
-    ip {
-        // TODO check if nil
-        ^netAddr.ip;
-    }
-
-    port {
-        // TODO check if nil
-        ^netAddr.port;
     }
 
     latency_ {|aLatency|

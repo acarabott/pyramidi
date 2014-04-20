@@ -60,6 +60,22 @@ PM_MIDI2OSCController { // rename PM_MIDI2OSCChannelController ?
         ^channel.midiChannel = this.getMidiChannels[aMidiChannelIndex];
     }
 
+    getIp {
+        ^channel.ip;
+    }
+
+    setIp {|aIp|
+        ^channel.ip = aIp;
+    }
+
+    getPort {
+        ^channel.port;
+    }
+
+    setPort {|aPort|
+        ^channel.port = aPort;
+    }
+
     error {|key, string|
         this.printMessage("ERROR", string);
         // TODO implement error on view, if no view, print
