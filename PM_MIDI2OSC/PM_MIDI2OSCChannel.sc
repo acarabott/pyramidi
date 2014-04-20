@@ -14,6 +14,8 @@ PM_MIDI2OSCChannel {
     var <midiChannel;
     var <midiMsgType;
     var <midiSrcID;
+    var <midiNum;
+    var <midiVal;
     var <controller;
     var <>debug = true;
 

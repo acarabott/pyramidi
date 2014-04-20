@@ -6,7 +6,8 @@ MIDIClient.init;
 
 ~channel = PM_MIDI2OSCChannel("rhodes");
 ~controller = PM_MIDI2OSCController(~channel);
-
+~view = ();
+~controller.setView(~view);
 ~refreshDevices = {
 	~device.items = ~controller.getMidiSrcLabels;
 };
@@ -103,16 +104,22 @@ v.decorator.nextLine;
 	])
 	.action_({|butt|
 		if(butt.value == 1) {
-			// ~controller.monitorMidi = true;
+			~controller.monitorMidi = true;
 		} {
-			// ~controller.monitorMidi = false;
+			~controller.monitorMidi = false;
 		};
 	});
 
+
 ~midiMonitor = StaticText(v, ((~vw - (~m * 4)) - 20)@20)
-	// .string_(~controller.getMidiValue)
 	.align_(\left)
 	.background_(Color.white);
+
+~view.updateMidiMonitor = {|aString|
+	{
+		~midiMonitor.string = aString;
+	}
+};
 
 v.decorator.nextLine;
 
