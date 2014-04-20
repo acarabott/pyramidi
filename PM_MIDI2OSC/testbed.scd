@@ -22,8 +22,8 @@ x.midiMsgType = "\\noteOn";
 x.midiSrcID = 123
 MIDIClient.init;
 
-x.midiSrcID = PM_MIDI2OSCChannel.midiSrcIDs[1];
-x.midiSrcID == PM_MIDI2OSCChannel.midiSrcIDs[1];
+x.midiSrcID = x.midiSrcIDs[1];
+x.midiSrcID == x.midiSrcIDs[1];
 x.midiSrcID.postln;
 
 

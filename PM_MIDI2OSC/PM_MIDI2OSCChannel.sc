@@ -3,6 +3,7 @@ PM_MIDI2OSCChannel {
     classvar <midiMsgTypes;
     classvar <midiNonNumTypes;
     classvar midiSrcIDs;
+    classvar midiSrcLabels;
     classvar controllerMethods;
 
     var <name;
@@ -44,20 +45,6 @@ PM_MIDI2OSCChannel {
         ^super.new.midi2oscChannelInit(aName);
     }
 
-    *midiSrcIDs {
-        if(MIDIClient.initialized.not) {
-            this.error("MIDIClient is not initialised, do MIDIClient.init;");
-
-            ^[];
-        } {
-            if(midiSrcIDs.isNil) {
-                midiSrcIDs = [nil] ++ MIDIClient.sources.collect (_.uid);
-            };
-        };
-
-        ^midiSrcIDs.copy;
-    }
-
     *controllerMethods {
         ^controllerMethods.copy;
     }
@@ -94,6 +81,8 @@ PM_MIDI2OSCChannel {
         midiMsgType =   nil;
         midiSrcID =     \unset; // nil would respond to all
         controller =    nil;
+
+        this.initMidi;
     }
 
     name_ {|aName|
@@ -122,6 +111,35 @@ PM_MIDI2OSCChannel {
 
         enabled = aEnabled;
         ^this;
+    }
+
+    initMidi {
+        if(MIDIClient.initialized.not) {
+            this.notify(\error,
+                "MIDIClient is not initialised, do MIDIClient.init;"
+            );
+
+            ^[];
+        } {
+            if(midiSrcIDs.isNil) {
+                midiSrcIDs = [nil] ++ MIDIClient.sources.collect (_.uid);
+            };
+            if(midiSrcLabels.isNil) {
+                midiSrcLabels = ["all"] ++ MIDIClient.sources.collect (
+                    _.device + ":" + _.name;
+                );
+            };
+        };
+    }
+
+    midiSrcIDs {
+        this.initMidi;
+        ^midiSrcIDs.copy;
+    }
+
+    midiSrcLabels {
+        this.initMidi;
+        ^midiSrcLabels.copy;
     }
 
     createNetAddr {|ip, port|
@@ -220,12 +238,13 @@ PM_MIDI2OSCChannel {
     }
 
     midiSrcID_ {|aMidiSrcID|
-        if(MIDIClient.initialized.not) {
-            this.class.midiSrcIDs;
+        var srcIDs = this.midiSrcIDs;
+
+        if(srcIDs.isEmpty) {
             ^this;
         };
 
-        if(this.class.midiSrcIDs.includes(aMidiSrcID).not) {
+        if(srcIDs.includes(aMidiSrcID).not) {
             this.notify(\error,
                 "Invalid MIDI source ID" ++ Char.nl
                 ++ "should be a symbol, one of:" ++ Char.nl
