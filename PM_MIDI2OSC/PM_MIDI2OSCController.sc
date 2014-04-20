@@ -69,6 +69,10 @@ PM_MIDI2OSCController { // rename PM_MIDI2OSCChannelController ?
         this.printMessage("WARNING", string);
     }
 
+    debug {|string|
+        this.printMessage("DEBUG", string);
+    }
+
     printMessage {|type, string|
         Post << "------------Controller------------" << Char.nl
              << type << ":" << Char.nl

@@ -14,8 +14,8 @@ PM_MIDI2OSCChannel {
     var <midiChannel;
     var <midiMsgType;
     var <midiSrcID;
-
     var <controller;
+    var <>debug = true;
 
     /*
     ==============
@@ -37,7 +37,8 @@ PM_MIDI2OSCChannel {
 
         controllerMethods = IdentityDictionary[
             \error ->   [\this, \string],
-            \warning -> [\this, \string]
+            \warning -> [\this, \string],
+            \debug ->   [\this, \string]
         ];
     }
 
@@ -110,6 +111,12 @@ PM_MIDI2OSCChannel {
         };
 
         enabled = aEnabled;
+
+        this.notify(\debug,
+            "Channel:" + name ++ Char.nl
+            ++ Char.tab ++ "SET: enabled:" + enabled
+        );
+
         ^this;
     }
 
@@ -204,6 +211,11 @@ PM_MIDI2OSCChannel {
 
         latency = aLatency;
 
+        this.notify(\debug,
+            "Channel:" + name ++ Char.nl
+            ++ Char.tab ++ "SET: latency:" + latency
+        );
+
         ^this;
     }
 
@@ -218,6 +230,11 @@ PM_MIDI2OSCChannel {
         };
 
         midiChannel = aMidiChannel;
+
+        this.notify(\debug,
+            "Channel:" + name ++ Char.nl
+            ++ Char.tab ++ "SET: midiChannel:" + midiChannel
+        );
 
         ^this;
     }
@@ -234,6 +251,11 @@ PM_MIDI2OSCChannel {
 
         midiMsgType = aMidiMsgType;
 
+        this.notify(\debug,
+            "Channel:" + name ++ Char.nl
+            ++ Char.tab ++ "SET: midiMsgType:" + midiMsgType
+        );
+
         ^this;
     }
 
@@ -248,12 +270,17 @@ PM_MIDI2OSCChannel {
             this.notify(\error,
                 "Invalid MIDI source ID" ++ Char.nl
                 ++ "should be a symbol, one of:" ++ Char.nl
-                ++ Char.tab ++ this.class.midiSrcIDs
+                ++ Char.tab ++ srcIDs
             );
             ^this;
         };
 
         midiSrcID = aMidiSrcID;
+
+        this.notify(\debug,
+            "Channel:" + name ++ Char.nl
+            ++ Char.tab ++ "SET: midiSrcID:" + midiSrcID
+        );
 
         ^this;
     }
@@ -268,10 +295,20 @@ PM_MIDI2OSCChannel {
         };
 
         controller = aController;
+
+        this.notify(\debug,
+            "Channel:" + name ++ Char.nl
+            ++ Char.tab ++ "SET: controller:" + controller
+        );
+
         ^this;
     }
 
     notify {|type, string|
+        if(type == \debug && debug.not) {
+            ^nil;
+        };
+
         if(controller.notNil) {
             if(controller.respondsTo(type)) {
                 controller.perform(type, string);
