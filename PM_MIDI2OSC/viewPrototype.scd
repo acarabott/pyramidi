@@ -80,13 +80,13 @@ StaticText(v, ~full@20)
 	.align_(\center);
 
 ~midiMsgType = PopUpMenu(v, ~full@20)
+	.value_(~controller.getMidiMsgType)
 	.items_(~controller.getMidiMsgTypes)
 	.action_({|menu|
 		var sym = menu.item.asSymbol;
 		~controller.setMidiMsgType(sym);
 		~testVal2.visible = ~controller.getMidiNonNumTypes.includes(sym).not;
 	});
-~midiMsgType.value_(~midiMsgType.items.indexOf(~controller.getMidiMsgType));
 // ~midiMsgType.valueAction = 3;
 
 v.decorator.nextLine;
@@ -164,10 +164,10 @@ v.decorator.nextLine;
 
 
 ~oscAddress = TextField(v, ~full@20)
-	// .string_(~controller.getOSCAddress)
+	.string_(~controller.getOscAddress)
 	.align_(\center)
 	.action_({|field|
-		// ~controller.setOSCAddress(field.string);
+		~controller.setOSCAddress(field.string);
 	});
 
 v.decorator.nextLine;

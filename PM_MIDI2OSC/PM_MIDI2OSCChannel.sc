@@ -15,7 +15,7 @@ PM_MIDI2OSCChannel {
     var <midiNum;
     var <midiVal;
     var netAddr;
-    var <oscAddr;
+    var <oscAddress;
     var <latency;
     var <controller;
     var <>debug = true;
@@ -84,6 +84,7 @@ PM_MIDI2OSCChannel {
         midiChannel =   0;
         midiMsgType =   \noteOn;
         midiSrcID =     nil; // nil responds to all
+        oscAddress =    "/" ++ midiMsgType;
         controller =    nil;
 
         this.initMidi;
@@ -301,6 +302,34 @@ PM_MIDI2OSCChannel {
         );
 
         ^netAddr;
+    }
+
+    oscAddress_ {|aOscAddress|
+        if(aOscAddress.isString.not) {
+            this.notify(\error, \oscAddress,
+                "OSC address must be a string"
+            );
+            ^this;
+        };
+        if(aOscAddress.isEmpty) {
+            this.notify(\error, \oscAddress,
+                "OSC address must be at least one character"
+            );
+            ^this;
+        };
+
+        oscAddress = aOscAddress;
+
+        if(oscAddress[0] != $/) {
+            this.notify(\warning, \oscAddress,
+                "OSC addresses *should* start with /"
+            );
+        };
+        this.notify(\debug, \set,
+            "oscAddress:" + oscAddress
+        );
+
+        ^this;
     }
 
     latency_ {|aLatency|

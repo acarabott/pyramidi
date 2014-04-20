@@ -148,6 +148,14 @@ PM_MIDI2OSCController { // rename PM_MIDI2OSCChannelController ?
         ^channel.port = aPort;
     }
 
+    getOscAddress {
+        ^channel.oscAddress;
+    }
+
+    setOSCAddress {|aOscAddress|
+        ^channel.oscAddress = aOscAddress;
+    }
+
     error {|key, string|
 
         switch (key)
