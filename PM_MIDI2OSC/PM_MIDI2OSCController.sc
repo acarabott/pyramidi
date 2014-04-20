@@ -60,6 +60,22 @@ PM_MIDI2OSCController { // rename PM_MIDI2OSCChannelController ?
         ^channel.midiChannel = this.getMidiChannels[aMidiChannelIndex];
     }
 
+    getMidiMsgTypes {
+        ^channel.class.midiMsgTypes;
+    }
+
+    getMidiMsgType {
+        ^channel.midiMsgType;
+    }
+
+    setMidiMsgType {|aMidiMsgType|
+        ^channel.midiMsgType = aMidiMsgType
+    }
+
+    getMidiNonNumTypes {
+        ^channel.class.midiNonNumTypes;
+    }
+
     getIp {
         ^channel.ip;
     }
