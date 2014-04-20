@@ -80,7 +80,7 @@ PM_MIDI2OSCChannel {
         midiFunc =      nil;
         midiChannel =   0;
         midiMsgType =   \noteOn;
-        midiSrcID =     \unset; // nil would respond to all
+        midiSrcID =     nil; // nil responds to all
         controller =    nil;
 
         this.initMidi;
