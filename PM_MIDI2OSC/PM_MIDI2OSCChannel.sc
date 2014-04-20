@@ -8,14 +8,15 @@ PM_MIDI2OSCChannel {
 
     var <name;
     var <enabled;
-    var netAddr;
-    var <latency;
     var midiFunc;
     var <midiChannel;
     var <midiMsgType;
     var <midiSrcID;
     var <midiNum;
     var <midiVal;
+    var netAddr;
+    var <oscAddr;
+    var <latency;
     var <controller;
     var <>debug = true;
 
@@ -151,6 +152,72 @@ PM_MIDI2OSCChannel {
         ^midiSrcLabels.copy;
     }
 
+    midiChannel_ {|aMidiChannel|
+        if(this.class.midiChannels.includes(aMidiChannel).not) {
+            this.notify(\error, \midiChannel,
+                "Invalid MIDI channel" ++ Char.nl
+                ++ "should be one of:" ++ Char.nl
+                ++ Char.tab ++ this.class.midiChannels
+            );
+            ^this;
+        };
+
+        midiChannel = aMidiChannel;
+
+        this.notify(\debug, nil,
+            "Channel:" + name ++ Char.nl
+            ++ Char.tab ++ "SET: midiChannel:" + midiChannel
+        );
+
+        ^this;
+    }
+
+    midiMsgType_ {|aMidiMsgType|
+        if(this.class.midiMsgTypes.includes(aMidiMsgType).not) {
+            this.notify(\error, \midiMsgType,
+                "Invalid MIDI message type" ++ Char.nl
+                ++ "should be a symbol, one of:" ++ Char.nl
+                ++ Char.tab ++ this.class.midiMsgTypes
+            );
+            ^this;
+        };
+
+        midiMsgType = aMidiMsgType;
+
+        this.notify(\debug, nil,
+            "Channel:" + name ++ Char.nl
+            ++ Char.tab ++ "SET: midiMsgType:" + midiMsgType
+        );
+
+        ^this;
+    }
+
+    midiSrcID_ {|aMidiSrcID|
+        var srcIDs = this.midiSrcIDs;
+
+        if(srcIDs.isEmpty) {
+            ^this;
+        };
+
+        if(srcIDs.includes(aMidiSrcID).not) {
+            this.notify(\error, \midiSrcId,
+                "Invalid MIDI source ID" ++ Char.nl
+                ++ "should be a symbol, one of:" ++ Char.nl
+                ++ Char.tab ++ srcIDs
+            );
+            ^this;
+        };
+
+        midiSrcID = aMidiSrcID;
+
+        this.notify(\debug, nil,
+            "Channel:" + name ++ Char.nl
+            ++ Char.tab ++ "SET: midiSrcID:" + midiSrcID
+        );
+
+        ^this;
+    }
+
     ip {
         if(netAddr.isNil) {
             ^nil;
@@ -255,72 +322,6 @@ PM_MIDI2OSCChannel {
         this.notify(\debug, nil,
             "Channel:" + name ++ Char.nl
             ++ Char.tab ++ "SET: latency:" + latency
-        );
-
-        ^this;
-    }
-
-    midiChannel_ {|aMidiChannel|
-        if(this.class.midiChannels.includes(aMidiChannel).not) {
-            this.notify(\error, \midiChannel,
-                "Invalid MIDI channel" ++ Char.nl
-                ++ "should be one of:" ++ Char.nl
-                ++ Char.tab ++ this.class.midiChannels
-            );
-            ^this;
-        };
-
-        midiChannel = aMidiChannel;
-
-        this.notify(\debug, nil,
-            "Channel:" + name ++ Char.nl
-            ++ Char.tab ++ "SET: midiChannel:" + midiChannel
-        );
-
-        ^this;
-    }
-
-    midiMsgType_ {|aMidiMsgType|
-        if(this.class.midiMsgTypes.includes(aMidiMsgType).not) {
-            this.notify(\error, \midiMsgType,
-                "Invalid MIDI message type" ++ Char.nl
-                ++ "should be a symbol, one of:" ++ Char.nl
-                ++ Char.tab ++ this.class.midiMsgTypes
-            );
-            ^this;
-        };
-
-        midiMsgType = aMidiMsgType;
-
-        this.notify(\debug, nil,
-            "Channel:" + name ++ Char.nl
-            ++ Char.tab ++ "SET: midiMsgType:" + midiMsgType
-        );
-
-        ^this;
-    }
-
-    midiSrcID_ {|aMidiSrcID|
-        var srcIDs = this.midiSrcIDs;
-
-        if(srcIDs.isEmpty) {
-            ^this;
-        };
-
-        if(srcIDs.includes(aMidiSrcID).not) {
-            this.notify(\error, \midiSrcId,
-                "Invalid MIDI source ID" ++ Char.nl
-                ++ "should be a symbol, one of:" ++ Char.nl
-                ++ Char.tab ++ srcIDs
-            );
-            ^this;
-        };
-
-        midiSrcID = aMidiSrcID;
-
-        this.notify(\debug, nil,
-            "Channel:" + name ++ Char.nl
-            ++ Char.tab ++ "SET: midiSrcID:" + midiSrcID
         );
 
         ^this;
