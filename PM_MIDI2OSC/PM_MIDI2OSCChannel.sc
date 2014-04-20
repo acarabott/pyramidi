@@ -116,9 +116,8 @@ PM_MIDI2OSCChannel {
 
         enabled = aEnabled;
 
-        this.notify(\debug, nil,
-            "Channel:" + name ++ Char.nl
-            ++ Char.tab ++ "SET: enabled:" + enabled
+        this.notify(\debug, \set,
+            "enabled:" + enabled
         );
 
         ^this;
@@ -165,9 +164,8 @@ PM_MIDI2OSCChannel {
 
         midiChannel = aMidiChannel;
 
-        this.notify(\debug, nil,
-            "Channel:" + name ++ Char.nl
-            ++ Char.tab ++ "SET: midiChannel:" + midiChannel
+        this.notify(\debug, \set,
+            "midiChannel:" + midiChannel
         );
 
         ^this;
@@ -185,9 +183,8 @@ PM_MIDI2OSCChannel {
 
         midiMsgType = aMidiMsgType;
 
-        this.notify(\debug, nil,
-            "Channel:" + name ++ Char.nl
-            ++ Char.tab ++ "SET: midiMsgType:" + midiMsgType
+        this.notify(\debug, \set,
+            "midiMsgType:" + midiMsgType
         );
 
         ^this;
@@ -211,9 +208,8 @@ PM_MIDI2OSCChannel {
 
         midiSrcID = aMidiSrcID;
 
-        this.notify(\debug, nil,
-            "Channel:" + name ++ Char.nl
-            ++ Char.tab ++ "SET: midiSrcID:" + midiSrcID
+        this.notify(\debug, \set,
+            "midiSrcID:" + midiSrcID
         );
 
         ^this;
@@ -296,9 +292,8 @@ PM_MIDI2OSCChannel {
         };
         netAddr = NetAddr(aIp, aPort);
 
-        this.notify(\debug, nil,
-            "Channel:" + name ++ Char.nl
-            ++ Char.tab ++ "SET: netAddr:" + netAddr
+        this.notify(\debug, \set,
+            "netAddr:" + netAddr
         );
 
         ^netAddr;
@@ -348,9 +343,8 @@ PM_MIDI2OSCChannel {
 
         latency = aLatency;
 
-        this.notify(\debug, nil,
-            "Channel:" + name ++ Char.nl
-            ++ Char.tab ++ "SET: latency:" + latency
+        this.notify(\debug, \set,
+            "latency:" + latency
         );
 
         ^this;
@@ -367,9 +361,8 @@ PM_MIDI2OSCChannel {
 
         controller = aController;
 
-        this.notify(\debug, nil,
-            "Channel:" + name ++ Char.nl
-            ++ Char.tab ++ "SET: controller:" + controller
+        this.notify(\debug, \set,
+            "controller:" + controller
         );
 
         ^this;
@@ -383,7 +376,10 @@ PM_MIDI2OSCChannel {
         if(controller.notNil) {
             if(controller.respondsTo(type)) {
                 if(type == \debug) {
-                    controller.perform(type, string);
+                    controller.perform(\debug,
+                        "Channel:" + name ++ Char.nl
+                        ++ Char.tab ++ key.asString.toUpper ++ ":" + string
+                    );
                 } {
                    controller.perform(type, key, string);
                 };
