@@ -3,6 +3,7 @@ PM_MIDI2OSCController { // rename PM_MIDI2OSCChannelController ?
     var <>view;
     var midiMonitorRout;
 
+    // TODO have routine that checks text fields for matches
     *initClass {
     }
 
