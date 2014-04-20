@@ -29,8 +29,8 @@ PM_MIDI2OSCChannel {
         ];
 
         midiMsgTypes = #[
-            \touch, \sysex, \polytouch, \control, \noteOff, \program, \noteOn,
-            \bend, \sysrt
+            \noteOn, \noteOff, \control, \program, \bend, \touch, \sysex,
+            \polytouch, \sysrt
         ];
 
         midiNonNumTypes = #[\touch, \program, \bend];
