@@ -129,20 +129,17 @@ PM_MIDI2OSCChannel {
 
     initMidi {
         if(MIDIClient.initialized.not) {
-            this.notify(\error, \initMidi,
-                "MIDIClient is not initialised, refresh MIDI clients"
-            );
+            MIDIClient.init;
+            MIDIIn.connectAll;
+        };
 
-            ^[];
-        } {
-            if(midiSrcIDs.isNil) {
-                midiSrcIDs = [nil] ++ MIDIClient.sources.collect (_.uid);
-            };
-            if(midiSrcLabels.isNil) {
-                midiSrcLabels = ["all"] ++ MIDIClient.sources.collect (
-                    _.device + ":" + _.name;
-                );
-            };
+        if(midiSrcIDs.isNil) {
+            midiSrcIDs = [nil] ++ MIDIClient.sources.collect (_.uid);
+        };
+        if(midiSrcLabels.isNil) {
+            midiSrcLabels = ["all"] ++ MIDIClient.sources.collect (
+                _.device + ":" + _.name;
+            );
         };
     }
 
