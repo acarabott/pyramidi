@@ -165,6 +165,8 @@ PM_MIDI2OSCChannel {
 
         midiChannel = aMidiChannel;
 
+        this.createMidiFunc;
+
         this.notify(\debug, \set,
             "midiChannel:" + midiChannel
         );
@@ -183,6 +185,8 @@ PM_MIDI2OSCChannel {
         };
 
         midiMsgType = aMidiMsgType;
+
+        this.createMidiFunc;
 
         this.notify(\debug, \set,
             "midiMsgType:" + midiMsgType
@@ -208,6 +212,8 @@ PM_MIDI2OSCChannel {
         };
 
         midiSrcID = aMidiSrcID;
+
+        this.createMidiFunc;
 
         this.notify(\debug, \set,
             "midiSrcID:" + midiSrcID
@@ -349,6 +355,91 @@ PM_MIDI2OSCChannel {
         );
 
         ^this;
+    }
+
+    createMidiFunc {
+        var func;
+
+        if(netAddr.isNil) {
+            this.notify(\error, \ip,
+                "ip or port not set"
+            );
+            this.notify(\error, \port, "");
+            ^nil;
+        };
+        if(midiChannels.includes(midiChannel).not) {
+            this.notify(\error, \key,
+                "MIDI channel not set"
+            );
+            ^nil;
+        };
+        if(midiMsgTypes.includes(midiMsgType).not) {
+            this.notify(\error, \key,
+                "MIDI message type not set"
+            );
+            ^nil;
+        };
+        if(midiSrcIDs.includes(midiSrcID).not) {
+            this.notify(\error, \key,
+                "MIDI source ID not set"
+            );
+            ^nil;
+        };
+
+        // free existing if it exists
+        midiFunc.free;
+
+        if(midiNonNumTypes.includes(midiMsgType)) {
+            func = {|val, chan, src|
+                if(enabled) {
+                    SystemClock.sched(latency, {
+                        netAddr.sendMsg(oscAddress, val);
+
+                        this.notify(\debug, \sendMsg,
+                            "sending OSC msg:" + Char.nl
+                            ++ Char.tab ++ "val:" + val
+                        );
+                    });
+                };
+                this.notify(\debug, \midiIn,
+                    "received MIDI:" + Char.nl
+                    ++ Char.tab ++ "val:" + val
+                )
+            };
+        } {
+            func = {|val, num, chan, src|
+                if(enabled) {
+                    SystemClock.sched(latency, {
+                        netAddr.sendMsg(oscAddress, num, val);
+
+                        this.notify(\debug, \sendMsg,
+                            "sending OSC msg:" + Char.nl
+                            ++ Char.tab ++ "num:" + num
+                            ++ Char.tab ++ "val:" + val
+                        );
+                    });
+                };
+                this.notify(\debug, \midiIn,
+                    "received MIDI:" + Char.nl
+                    ++ Char.tab ++ "num:" + num
+                    ++ Char.tab ++ "val:" + val
+                )
+            };
+        };
+
+        midiFunc = MIDIFunc(
+            func:       func,
+            msgNum:     nil, // respond to all vals
+            chan:       midiChannel,
+            msgType:    midiMsgType,
+            srcID:      midiSrcID
+        );
+
+        this.notify(\debug, \set,
+            "midiFunc" + midiFunc
+        );
+
+        ^nil;
     }
 
     controller_ {|aController|
