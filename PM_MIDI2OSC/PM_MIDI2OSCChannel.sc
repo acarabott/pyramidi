@@ -105,6 +105,10 @@ PM_MIDI2OSCChannel {
 
         name = aName;
 
+        this.notify(\debug, \set,
+            "name:" + name
+        );
+
         ^this;
     }
 
