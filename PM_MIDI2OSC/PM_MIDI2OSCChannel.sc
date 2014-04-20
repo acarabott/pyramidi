@@ -3,7 +3,7 @@ PM_MIDI2OSCChannel {
     classvar <midiMsgTypes;
     classvar <midiNonNumTypes;
     classvar midiSrcIDs;
-    classvar <controllerMethods;
+    classvar controllerMethods;
 
     var <name;
     var <enabled;
@@ -34,7 +34,10 @@ PM_MIDI2OSCChannel {
 
         midiNonNumTypes = #[\touch, \program, \bend];
 
-        controllerMethods = #[\error, \warning];
+        controllerMethods = IdentityDictionary[
+            \error ->   [\this, \string],
+            \warning -> [\this, \string]
+        ];
     }
 
     *new {|aName|
@@ -53,6 +56,19 @@ PM_MIDI2OSCChannel {
         };
 
         ^midiSrcIDs.copy;
+    }
+
+    *controllerMethods {
+        ^controllerMethods.copy;
+    }
+
+    *checkController {|aController|
+        ^this.controllerMethods.keys.every {|methodKey|
+            var method = aController.class.findMethod(methodKey);
+            method.notNil and: {
+                method.argNames.includesAll(this.controllerMethods[methodKey])
+            };
+        };
     }
 
     *printMessage {|type, string|
@@ -224,9 +240,9 @@ PM_MIDI2OSCChannel {
     }
 
     controller_ {|aController|
-        if(this.class.controllerMethods.every (aController.respondsTo(_)).not) {
+        if(this.class.checkController(aController).not) {
             this.notify(\error,
-                "controller doesn't respond to one of:" ++ Char.nl
+                "controller doesn't repond to all methods:" ++ Char.nl
                 ++ Char.tab ++ this.class.controllerMethods;
             );
             ^this;
@@ -252,4 +268,3 @@ PM_MIDI2OSCChannel {
         };
     }
 }
-
