@@ -179,13 +179,13 @@ StaticText(v, ~full@20)
 v.decorator.nextLine;
 
 ~latency = NumberBox(v, ~full@20)
-	// .value_(~controller.getLatency)
+	.value_(~controller.getLatency)
 	.clipLo_(0)
 	.clipHi_(60)
-	.decimals_(4)
+	.decimals_(3)
 	.align_(\center)
-	.action_({ |box|
-		// ~controller.setLatency(box.value);
+	.action_({|box|
+		~controller.setLatency(box.value);
 	});
 
 v.decorator.nextLine;

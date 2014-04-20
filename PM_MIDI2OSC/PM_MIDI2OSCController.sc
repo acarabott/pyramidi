@@ -157,6 +157,14 @@ PM_MIDI2OSCController { // rename PM_MIDI2OSCChannelController ?
         ^channel.oscAddress = aOscAddress;
     }
 
+    getLatency {
+        ^channel.latency;
+    }
+
+    setLatency {|aLatency|
+        ^channel.latency = aLatency;
+    }
+
     error {|key, string|
 
         switch (key)
