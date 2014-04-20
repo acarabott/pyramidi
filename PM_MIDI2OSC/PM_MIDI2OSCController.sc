@@ -77,6 +77,13 @@ PM_MIDI2OSCController { // rename PM_MIDI2OSCChannelController ?
     }
 
     error {|key, string|
+
+        switch (key)
+            {\name}    {
+                // TODO error on the interface
+            }
+            {}    {};
+
         this.printMessage("ERROR", string);
         // TODO implement error on view, if no view, print
     }

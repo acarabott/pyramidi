@@ -112,7 +112,7 @@ PM_MIDI2OSCChannel {
 
         enabled = aEnabled;
 
-        this.notify(\debug,
+        this.notify(\debug, nil,
             "Channel:" + name ++ Char.nl
             ++ Char.tab ++ "SET: enabled:" + enabled
         );
@@ -250,7 +250,7 @@ PM_MIDI2OSCChannel {
 
         latency = aLatency;
 
-        this.notify(\debug,
+        this.notify(\debug, nil,
             "Channel:" + name ++ Char.nl
             ++ Char.tab ++ "SET: latency:" + latency
         );
@@ -270,7 +270,7 @@ PM_MIDI2OSCChannel {
 
         midiChannel = aMidiChannel;
 
-        this.notify(\debug,
+        this.notify(\debug, nil,
             "Channel:" + name ++ Char.nl
             ++ Char.tab ++ "SET: midiChannel:" + midiChannel
         );
@@ -290,7 +290,7 @@ PM_MIDI2OSCChannel {
 
         midiMsgType = aMidiMsgType;
 
-        this.notify(\debug,
+        this.notify(\debug, nil,
             "Channel:" + name ++ Char.nl
             ++ Char.tab ++ "SET: midiMsgType:" + midiMsgType
         );
@@ -316,7 +316,7 @@ PM_MIDI2OSCChannel {
 
         midiSrcID = aMidiSrcID;
 
-        this.notify(\debug,
+        this.notify(\debug, nil,
             "Channel:" + name ++ Char.nl
             ++ Char.tab ++ "SET: midiSrcID:" + midiSrcID
         );
@@ -335,7 +335,7 @@ PM_MIDI2OSCChannel {
 
         controller = aController;
 
-        this.notify(\debug,
+        this.notify(\debug, nil,
             "Channel:" + name ++ Char.nl
             ++ Char.tab ++ "SET: controller:" + controller
         );
@@ -343,20 +343,25 @@ PM_MIDI2OSCChannel {
         ^this;
     }
 
-    notify {|type, string|
+    notify {|type, key, string|
         if(type == \debug && debug.not) {
             ^nil;
         };
 
         if(controller.notNil) {
             if(controller.respondsTo(type)) {
-                controller.perform(type, string);
+                if(type == \debug) {
+                    controller.perform(type, string);
+                } {
+                   controller.perform(type, key, string);
+                };
+
             } {
-                controller.error(
+                controller.error(key,
                     "controller doesn't respond to type:" ++ Char.nl
                     ++ Char.tab ++ type.asString
                 );
-                controller.error(string);
+                controller.error(key, string);
             };
         } {
             this.class.printMessage(type.asString.toUpper, string);
