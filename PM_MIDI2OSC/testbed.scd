@@ -40,6 +40,7 @@ x.port;
 
 c = PM_MIDI2OSCController();
 x.controller = c;
+x.controller = "hi";
 
 x.createNetAddr("123.123.123.123", 243.3);
 x.createNetAddr("123.123.123.123", 666);
