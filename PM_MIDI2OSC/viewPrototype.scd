@@ -79,12 +79,14 @@ StaticText(v, ~full@20)
 	.align_(\center);
 
 ~midiMsgType = PopUpMenu(v, ~full@20)
-	// .items_(~controller.getMidiMsgTypes.collect (_.asString))
+	.items_(~controller.getMidiMsgTypes)
 	.action_({|menu|
-		~controller.setMidiMsgType(menu.value);
-
-		// ~testVal2.visible = false;
+		var sym = menu.item.asSymbol;
+		~controller.setMidiMsgType(sym);
+		~testVal2.visible = ~controller.getMidiNonNumTypes.includes(sym).not;
 	});
+~midiMsgType.value_(~midiMsgType.items.indexOf(~controller.getMidiMsgType));
+// ~midiMsgType.valueAction = 3;
 
 v.decorator.nextLine;
 
@@ -208,5 +210,4 @@ v.decorator.nextLine;
 		butt.value.postln;
 	});
 );
-
 
