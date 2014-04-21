@@ -113,9 +113,7 @@ v.decorator.nextLine;
 	.background_(Color.white);
 
 ~view.updateMidiMonitor = {|aString|
-	{
-		~midiMonitor.string = aString;
-	}
+	~midiMonitor.string = "  " ++ aString;
 };
 
 v.decorator.nextLine;

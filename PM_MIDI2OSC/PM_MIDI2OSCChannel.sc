@@ -382,6 +382,8 @@ PM_MIDI2OSCChannel {
     createMidiFuncCallback {
         if(midiNonNumTypes.includes(midiMsgType)) {
             midiFuncCallback = {|val, chan, src|
+                midiVal = val;
+
                 if(enabled && netAddr.notNil) {
                     SystemClock.sched(latency, {
                         netAddr.sendMsg(oscAddress, val);
@@ -399,6 +401,9 @@ PM_MIDI2OSCChannel {
             };
         } {
             midiFuncCallback = {|val, num, chan, src|
+                midiVal = val;
+                midiNum = num;
+
                 if(enabled && netAddr.notNil) {
                     SystemClock.sched(latency, {
                         netAddr.sendMsg(oscAddress, num, val);

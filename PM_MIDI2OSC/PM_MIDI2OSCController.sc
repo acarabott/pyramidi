@@ -117,13 +117,13 @@ PM_MIDI2OSCController { // rename PM_MIDI2OSCChannelController ?
                     var val = channel.midiVal,
                         num = channel.midiNum;
 
-                    view.updateMidiMonitor(
-                        val.asString ++ if(num.isNil, "", " - " ++ num.asString)
+                    view['updateMidiMonitor'].(
+                    // view.updateMidiMonitor( //TODO swap this out
+                        val.asString ++ if(num.isNil, "", ", " ++ num.asString)
                     );
-
                     0.1.wait;
                 }
-            }.fork;
+            }.fork(AppClock);
         } {
             this.debug(
                 "Controller for:" + channel.name ++ Char.nl
