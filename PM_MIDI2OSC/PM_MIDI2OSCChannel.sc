@@ -429,13 +429,15 @@ PM_MIDI2OSCChannel {
                         netAddr.sendMsg(oscAddress, val);
 
                         this.notify(\debug, \sendMsg,
-                            "sending OSC msg:" + Char.nl
+                            name ++ Char.nl
+                            ++ "sending OSC msg:" + Char.nl
                             ++ Char.tab ++ "val:" + val
                         );
                     });
                 };
                 this.notify(\debug, \midiIn,
-                    "received MIDI:" + Char.nl
+                    name ++ Char.nl
+                    ++ "received MIDI:" + Char.nl
                     ++ Char.tab ++ "val:" + val
                 );
                 if(midiNotifying) {
@@ -451,14 +453,16 @@ PM_MIDI2OSCChannel {
                         netAddr.sendMsg(oscAddress, num, val);
 
                         this.notify(\debug, \sendMsg,
-                            "sending OSC msg:" + Char.nl
+                            name ++ Char.nl
+                            ++ "sending OSC msg:" + Char.nl
                             ++ Char.tab ++ "num:" + num
                             ++ Char.tab ++ "val:" + val
                         );
                     });
                 };
                 this.notify(\debug, \midiIn,
-                    "received MIDI:" + Char.nl
+                    name ++ Char.nl
+                    ++ "received MIDI:" + Char.nl
                     ++ Char.tab ++ "num:" + num
                     ++ Char.tab ++ "val:" + val
                 );
