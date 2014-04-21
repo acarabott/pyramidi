@@ -192,15 +192,23 @@ StaticText(v, ~full@20)
 v.decorator.nextLine;
 
 ~testVal1 = NumberBox(v, (~full * 0.5)-(~m * 0.5)@20)
+	.value_(~controller.getTestVal1)
 	.align_(\center)
+	.decimals_(0)
+	.clipLo_(0)
+	.clipHi_(127)
 	.action_({|box|
-		// ~controller.setTestVal(0, box.value)
+		~controller.setTestVal1(box.value.asInteger);
 	});
 
 ~testVal2 = NumberBox(v, (~full * 0.5)-(~m * 0.5)@20)
+	.value_(~controller.getTestVal2)
 	.align_(\center)
+	.decimals_(0)
+	.clipLo_(0)
+	.clipHi_(127)
 	.action_({|box|
-		// ~controller.setTestVal(1, box.value)
+		~controller.setTestVal2(box.value.asInteger);
 	});
 
 v.decorator.nextLine;
@@ -209,7 +217,6 @@ v.decorator.nextLine;
 		["Test", Color.black, Color.white]
 	])
 	.action_({|butt|
-		butt.value.postln;
+		~controller.sendTestSignal;
 	});
 );
-

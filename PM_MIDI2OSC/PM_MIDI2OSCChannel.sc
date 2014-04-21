@@ -21,6 +21,8 @@ PM_MIDI2OSCChannel {
     var netAddr;
     var <oscAddress;
     var <latency;
+    var <testVal1;
+    var <testVal2;
     var <controller;
     var <>debug = true;
 
@@ -92,6 +94,8 @@ PM_MIDI2OSCChannel {
         midiSrcID =         nil; // nil responds to all
         oscAddress =        "/" ++ midiMsgType;
         port =              defaultPort;
+        testVal1 =          0;
+        testVal2 =          0;
         controller =        nil;
 
         this.initMidi;
@@ -466,6 +470,66 @@ PM_MIDI2OSCChannel {
         );
 
         ^nil;
+    }
+
+    testVal1_ {|aTestVal|
+        if(aTestVal.isInteger.not) {
+            this.notify(\error, \testVal1,
+                "test value 1 should be an integer"
+            );
+            ^this;
+        };
+
+        testVal1 = aTestVal;
+
+        this.notify(\debug, \set,
+            "testVal1:" + testVal1
+        );
+
+        ^this;
+    }
+
+    testVal2_ {|aTestVal|
+        if(aTestVal.isInteger.not) {
+            this.notify(\error, \testVal2,
+                "test value 2 should be an integer"
+            );
+            ^this;
+        };
+
+        testVal2 = aTestVal;
+
+        this.notify(\debug, \set,
+            "testVal2:" + testVal2
+        );
+
+        ^this;
+    }
+
+    sendTestSignal {
+        if(netAddr.isNil) {
+            this.notify(\error, \test,
+                "ip address not set"
+            );
+            ^nil;
+        };
+
+        if(midiNonNumTypes.includes(midiMsgType)) {
+            netAddr.sendMsg(oscAddress, testVal1);
+
+            this.notify(\debug, \sendMsg,
+                "sending test OSC msg:" + Char.nl
+                ++ Char.tab ++ "val:" + testVal1
+            );
+        } {
+            netAddr.sendMsg(oscAddress, testVal1, testVal2);
+
+            this.notify(\debug, \sendMsg,
+                "sending test OSC msg:" + Char.nl
+                ++ Char.tab ++ "num:" + testVal1
+                ++ Char.tab ++ "val:" + testVal2
+            );
+        }
     }
 
     controller_ {|aController|

@@ -165,6 +165,28 @@ PM_MIDI2OSCController { // rename PM_MIDI2OSCChannelController ?
         ^channel.latency = aLatency;
     }
 
+    getTestVal1 {
+        ^channel.testVal1;
+    }
+
+    getTestVal2 {
+        ^channel.testVal2;
+    }
+
+    setTestVal1 {|aTestVal|
+        channel.testVal1 = aTestVal;
+        ^this;
+    }
+
+    setTestVal2 {|aTestVal|
+        channel.testVal2 = aTestVal;
+        ^this;
+    }
+
+    sendTestSignal {
+        ^channel.sendTestSignal;
+    }
+
     error {|key, string|
 
         switch (key)

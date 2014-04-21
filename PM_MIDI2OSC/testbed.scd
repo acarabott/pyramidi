@@ -45,3 +45,12 @@ x.controller = "hi";
 x.createNetAddr("123.123.123.123", 243.3);
 x.createNetAddr("123.123.123.123", 666);
 x.createNetAddr("123.123.123.123", 666);
+
+
+thisProcess.openUDPPort(65432);
+
+n = NetAddr("127.0.0.1", 65432)
+
+OSCdef(\hello, {|msg, time, addr, recvPort|
+	[msg, time, addr, recvPort].do (_.postln);
+}, '/program');
