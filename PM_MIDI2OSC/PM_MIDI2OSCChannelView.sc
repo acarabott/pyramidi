@@ -52,7 +52,10 @@ PM_MIDI2OSCChannelView {
 		};
 
 		controller = aController;
+		controller.debug("SET: view now has a controller");
 
 		^this;
 	}
+
+	// createName
 }

@@ -2,6 +2,7 @@ PM_MIDI2OSCChannelController {
     var channel;
     var <view;
     var midiMonitorRout;
+    var debugEnabled = true;
 
     // TODO have routine that checks text fields for matches
     // these should check if the view is actually visible
@@ -217,7 +218,9 @@ PM_MIDI2OSCChannelController {
     }
 
     debug {|string|
-        this.printMessage("DEBUG", string);
+        if(debugEnabled) {
+            this.printMessage("DEBUG", string);
+        };
     }
 
     printMessage {|type, string|
