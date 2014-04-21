@@ -360,7 +360,7 @@ PM_MIDI2OSCChannelView {
 				["Save", Color.black, Color.white]
 			])
 			.action_({|butt|
-				controller.saveSettings;
+				controller.saveSettingsToFile;
 			});
 
 		view.decorator.nextLine;
@@ -370,7 +370,7 @@ PM_MIDI2OSCChannelView {
 				["Load", Color.white, Color.black]
 			])
 			.action_({|butt|
-				controller.loadSettings;
+				controller.loadSettingsFromFile;
 			});
 
 		view.decorator.nextLine;
