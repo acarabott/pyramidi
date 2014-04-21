@@ -1,6 +1,6 @@
 PM_MIDI2OSCChannelController {
     var channel;
-    var view;
+    var <view;
     var midiMonitorRout;
 
     // TODO have routine that checks text fields for matches
@@ -8,12 +8,14 @@ PM_MIDI2OSCChannelController {
     *initClass {
     }
 
-    *new {|aChannel|
-        ^super.new.midi2oscControllerInit(aChannel);
+    *new {|aChannel, aView|
+        ^super.new.midi2oscControllerInit(aChannel, aView);
     }
 
-    midi2oscControllerInit {|aChannel|
-        this.channel = aChannel; // use custom setter
+    midi2oscControllerInit {|aChannel, aView|
+        // use custom setters
+        this.channel = aChannel;
+        this.view = aView;
     }
 
     // adding a channel automatically assigns this controller to that channel
@@ -36,13 +38,12 @@ PM_MIDI2OSCChannelController {
     }
 
     view_ {|aView|
-        // TODO remove when class implemented
-        // if(aView.isKindOf(PM_MIDI2OSCChannelView).not) {
-        //     this.error(\view,
-        //         "view is not a PM_MIDI2OSCChannelView"
-        //     );
-        //     ^this;
-        // };
+        if(aView.isKindOf(PM_MIDI2OSCChannelView).not) {
+            this.error(\view,
+                "view is not a PM_MIDI2OSCChannelView"
+            );
+            ^this;
+        };
 
         view = aView;
         view.controller = this;

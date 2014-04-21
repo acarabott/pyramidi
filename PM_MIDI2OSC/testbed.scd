@@ -54,3 +54,16 @@ n = NetAddr("127.0.0.1", 65432)
 OSCdef(\hello, {|msg, time, addr, recvPort|
 	[msg, time, addr, recvPort].do (_.postln);
 }, '/program');
+
+
+~channel = PM_MIDI2OSCChannel("rhodes");
+~view = PM_MIDI2OSCChannelView(Window("test"));
+~controller = PM_MIDI2OSCChannelController(~channel, ~view);
+~controller.view;
+~view.controller;
+
+~view.controller = "fuck"
+PM_MIDI2OSCController
+Window("test").class
+
+Window().classes/Lang/Improvements/extVarious
