@@ -1,7 +1,9 @@
-MIDIClient.init;
-
 ~refreshDevices.();
+~channel.enabled
+~channel.free;
 
+// HERE: on startup, not receiving MIDI, becaues checking if netaddr exists
+// HERE: on creating netAddr, not activating, because MIDI func doesn't exist
 (
 
 ~channel = PM_MIDI2OSCChannel("rhodes");
@@ -36,12 +38,9 @@ v.decorator.nextLine;
 		["on", Color.black, Color.green]
 	])
 	.action_({|butt|
-		if(butt.value == 1) {
-			~controller.enable;
-		} {
-			~controller.disable;
-		};
+		~controller.setEnabled = butt.value == 1;
 	});
+~enable.value = if(~controller.getEnabled, 1, 0);
 
 v.decorator.nextLine;
 

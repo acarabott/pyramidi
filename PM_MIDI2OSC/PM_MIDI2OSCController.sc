@@ -62,12 +62,12 @@ PM_MIDI2OSCController { // rename PM_MIDI2OSCChannelController ?
         channel.name = aName;
     }
 
-    enable {
-        ^channel.enabled = true;
+    getEnabled {
+        ^channel.enabled;
     }
 
-    disable {
-        ^channel.enabled = false;
+    setEnabled_ {|aEnabled|
+        ^channel.enabled = aEnabled;
     }
 
     getMidiSrcIDs {
