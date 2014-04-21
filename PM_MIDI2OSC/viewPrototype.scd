@@ -78,7 +78,7 @@ StaticText(v, ~full@20)
 	.align_(\center);
 
 ~midiMsgType = PopUpMenu(v, ~full@20)
-	.value_(~controller.midiMsgType)
+	.value_(~controller.midiMsgTypes.indexOf(~controller.midiMsgType))
 	.items_(~controller.midiMsgTypes)
 	.action_({|menu|
 		var sym = menu.item.asSymbol;

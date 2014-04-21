@@ -1,8 +1,7 @@
 PM_MIDI2OSCChannelController {
     var channel;
     var <view;
-    var midiMonitorRout;
-    var debugEnabled = true;
+    var <>debugEnabled = false;
 
     // TODO have routine that checks text fields for matches
     // these should check if the view is actually visible
@@ -142,38 +141,13 @@ PM_MIDI2OSCChannelController {
         ^channel.midiNonNumTypes;
     }
 
-    monitorMidi_ {|aMonitorMidi|
-        if(aMonitorMidi) {
-            this.debug(
-                "Controller for:" + channel.name ++ Char.nl
-                ++ Char.tab ++ "MIDI monitoring STARTED"
-            );
-            midiMonitorRout.stop;
-            midiMonitorRout = {
-                inf.do {
-                    var val = channel.midiVal,
-                        num = channel.midiNum;
-
-                    view.updateMidiMonitor(
-                        val.asString ++ if(num.isNil, "", ", " ++ num.asString)
-                    );
-                    0.1.wait;
-                }
-            }.fork(AppClock);
-        } {
-            this.debug(
-                "Controller for:" + channel.name ++ Char.nl
-                ++ Char.tab ++ "MIDI monitoring STOPPED"
-            );
-            midiMonitorRout.stop;
-            midiMonitorRout = nil;
-        };
-
-        ^this;
+    getMidiNotifying {
+        ^channel.midiNotifying;
     }
 
-    isMonitoring {
-        ^midiMonitorRout.isNil.not;
+    setMidiNotifying {|aMidiNotifying|
+        channel.midiNotifying =  aMidiNotifying;
+        ^this;
     }
 
     getIp {
@@ -250,6 +224,11 @@ PM_MIDI2OSCChannelController {
         this.printMessage("WARNING", string);
     }
 
+    update {|key, string|
+        switch (key)
+            {\midiChanged}    { view.updateMidiMonitor(string); };
+    }
+
     debug {|string|
         if(debugEnabled) {
             this.printMessage("DEBUG", string);
@@ -264,6 +243,5 @@ PM_MIDI2OSCChannelController {
     }
 
     free {
-        midiMonitorRout.stop;
     }
 }

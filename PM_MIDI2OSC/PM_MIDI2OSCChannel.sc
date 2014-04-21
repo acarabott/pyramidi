@@ -14,8 +14,8 @@ PM_MIDI2OSCChannel {
     var <midiChannel;
     var <midiMsgType;
     var <midiSrcID;
-    var <midiNum;
-    var <midiVal;
+    var <midiNotifying;
+
     var ip;
     var port;
     var netAddr;
@@ -24,7 +24,7 @@ PM_MIDI2OSCChannel {
     var <testVal1;
     var <testVal2;
     var <controller;
-    var <>debug = true;
+    var <>debugEnabled = false;
 
     /*
     ==============
@@ -47,6 +47,7 @@ PM_MIDI2OSCChannel {
         controllerMethods = IdentityDictionary[
             \error ->   [\this, \key, \string],
             \warning -> [\this, \key, \string],
+            \update ->  [\this, \key, \string],
             \debug ->   [\this, \string]
         ];
 
@@ -92,6 +93,7 @@ PM_MIDI2OSCChannel {
         midiChannel =       nil;
         midiMsgType =       \noteOn;
         midiSrcID =         nil; // nil responds to all
+        midiNotifying =     false;
         oscAddress =        "/" ++ midiMsgType;
         port =              defaultPort;
         testVal1 =          0;
@@ -155,6 +157,8 @@ PM_MIDI2OSCChannel {
 
         this.createMidiFuncCallback;
         this.createMidiFunc;
+
+        ^this;
     }
 
     midiSrcIDs {
@@ -250,6 +254,27 @@ PM_MIDI2OSCChannel {
         ^this;
     }
 
+    midiNotifying_ {|aMidiNotifying|
+        if(aMidiNotifying.isKindOf(Boolean).not) {
+            this.notify(\error, \midiNotifying,
+                "Invalid valud for midiNotifying, must be boolean"
+            );
+            ^this;
+        };
+
+        midiNotifying = aMidiNotifying;
+
+        if(midiNotifying.not) {
+            this.notify(\update, \midiChanged, "");
+        };
+
+        this.notify(\debug, \set,
+            "midiNotifying:" + midiNotifying
+        );
+
+        ^this;
+    }
+
     // ip and port instance variables are only used if there is no netAddr
     ip {
         if(netAddr.isNil) {
@@ -280,7 +305,7 @@ PM_MIDI2OSCChannel {
 
         this.createNetAddr(ip, this.port);
 
-        ^this.ip;
+        ^this;
     }
 
     port {
@@ -303,7 +328,7 @@ PM_MIDI2OSCChannel {
 
         this.createNetAddr(this.ip, port);
 
-        ^this.port;
+        ^this;
     }
 
     createNetAddr {|aIp, aPort|
@@ -399,8 +424,6 @@ PM_MIDI2OSCChannel {
     createMidiFuncCallback {
         if(midiNonNumTypes.includes(midiMsgType)) {
             midiFuncCallback = {|val, chan, src|
-                midiVal = val;
-
                 if(enabled && netAddr.notNil) {
                     SystemClock.sched(latency, {
                         netAddr.sendMsg(oscAddress, val);
@@ -414,13 +437,15 @@ PM_MIDI2OSCChannel {
                 this.notify(\debug, \midiIn,
                     "received MIDI:" + Char.nl
                     ++ Char.tab ++ "val:" + val
-                )
+                );
+                if(midiNotifying) {
+                    this.notify(\update, \midiChanged,
+                        "val:" ++ val
+                    );
+                };
             };
         } {
             midiFuncCallback = {|val, num, chan, src|
-                midiVal = val;
-                midiNum = num;
-
                 if(enabled && netAddr.notNil) {
                     SystemClock.sched(latency, {
                         netAddr.sendMsg(oscAddress, num, val);
@@ -436,13 +461,21 @@ PM_MIDI2OSCChannel {
                     "received MIDI:" + Char.nl
                     ++ Char.tab ++ "num:" + num
                     ++ Char.tab ++ "val:" + val
-                )
+                );
+                if(midiNotifying) {
+                    this.notify(\update, \midiChanged,
+                        "num:" ++ num ++ ", val:" ++ val
+                    );
+                };
             };
         };
 
         this.notify(\debug, \set,
             "midiFuncCallback:" + midiFuncCallback
         );
+
+        this.notify(\update, \midiChanged, "");
+        ^nil;
     }
 
     createMidiFunc {
@@ -482,6 +515,7 @@ PM_MIDI2OSCChannel {
             "midiFunc" + midiFunc
         );
 
+        this.notify(\update, \midiChanged, "");
         ^nil;
     }
 
@@ -543,6 +577,8 @@ PM_MIDI2OSCChannel {
                 ++ Char.tab ++ "val:" + testVal2
             );
         }
+
+        ^this;
     }
 
     controller_ {|aController|
@@ -564,9 +600,11 @@ PM_MIDI2OSCChannel {
     }
 
     notify {|type, key, string|
-        if(type == \debug && debug.not) {
+        if(type == \debug && debugEnabled.not) {
             ^nil;
         };
+
+        string = string.asString; // ensure it's a string;
 
         if(controller.notNil) {
             if(controller.respondsTo(type)) {
@@ -589,10 +627,14 @@ PM_MIDI2OSCChannel {
         } {
             this.class.printMessage(type.asString.toUpper, string);
         };
+
+        ^this;
     }
 
     free {
         midiFunc.free;
         netAddr.disconnect;
+
+        ^this;
     }
 }

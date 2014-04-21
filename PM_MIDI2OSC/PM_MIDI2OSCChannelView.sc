@@ -9,7 +9,6 @@ PM_MIDI2OSCChannelView {
 	var nameField;
 	var enableButton;
 	var deviceMenu;
-	var deviceMenu;
 	var midiChannelMenu;
 	var midiMsgTypeMenu;
 	var midiMonitorText;
@@ -148,8 +147,12 @@ PM_MIDI2OSCChannelView {
 			.action_({|menu|
 				if(controller.notNil) {
 					var sym = menu.item.asSymbol;
+
 					controller.setMidiMsgType(sym);
-					testVal2Box.visible = controller.getMidiNonNumTypes.includes(sym).not;
+					testVal2Box.visible = controller
+											.getMidiNonNumTypes
+											.includes(sym)
+											.not;
 				};
 			});
 
@@ -171,11 +174,7 @@ PM_MIDI2OSCChannelView {
 			])
 			.action_({|butt|
 				if(controller.notNil) {
-					if(butt.value == 1) {
-						controller.setMonitorMidi(true);
-					} {
-						controller.setMonitorMidi(false);
-					};
+					controller.setMidiNotifying(butt.value == 1);
 				};
 			});
 
@@ -188,7 +187,7 @@ PM_MIDI2OSCChannelView {
 	}
 
 	updateMidiMonitor {|aString|
-		midiMonitorText.string_(aString.asString);
+		{midiMonitorText.string_(aString.asString)}.fork(AppClock);
 
 		^nil;
 	}
@@ -341,7 +340,7 @@ PM_MIDI2OSCChannelView {
 			midiChannelMenu.value = 		controller.getMidiChannelIndex;
 			midiMsgTypeMenu.items = 		controller.getMidiMsgTypes;
 			midiMsgTypeMenu.value = 		controller.getMidiMsgTypeIndex;
-			midiEnableMonitorButton.value = if(controller.isMonitoring, 1, 0);
+			midiEnableMonitorButton.value = if(controller.getMidiNotifying,1,0);
 			ipField.string = 				controller.getIp;
 			portBox.value = 				controller.getPort;
 			oscAddressField.string = 		controller.getOscAddress;

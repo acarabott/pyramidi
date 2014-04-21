@@ -61,10 +61,20 @@ OSCdef(\hello, {|msg, time, addr, recvPort|
 ~controller = PM_MIDI2OSCChannelController(~channel, ~view);
 ~controller.view = ~view;
 ~controller.channel = ~channel;
-~view.controller;
 
-~view.controller = "fuck"
-PM_MIDI2OSCController
-Window("test").class
+~controller.debugEnabled = false;
+~channel.debugEnabled = false;
 
-Window().classes/Lang/Improvements/extVarious
+thisProcess.openUDPPort(6666);
+
+
+OSCdef(\hello, {|msg, time, addr, recvPort|
+	var len = 15;
+	Post << "----------------------------------" << Char.nl
+		 << "noteOn " << Char.nl
+		 << "-------" << Char.nl
+		 << "from:".padRight(len) << addr.ip << ":" << addr.port << Char.nl
+		 << "note:".padRight(len) << msg[1] << Char.nl
+		 << "velocity:".padRight(len) << msg[2] << Char.nl;
+}, '/noteOn');
+
