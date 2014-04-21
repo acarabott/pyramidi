@@ -636,8 +636,12 @@ PM_MIDI2OSCChannel {
     }
 
     free {
-        midiFunc.free;
-        netAddr.disconnect;
+        if(midiFunc.notNil) {
+            midiFunc.free;
+        };
+        if(netAddr.notNil) {
+            netAddr.disconnect;
+        };
 
         ^this;
     }
