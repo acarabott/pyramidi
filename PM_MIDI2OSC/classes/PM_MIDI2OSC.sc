@@ -69,16 +69,4 @@ PM_MIDI2OSC {
 			PM_MIDI2OSCChannelController(channels.last, views.last)
 		);
 	}
-
-	channels {
-		^channels.copy;
-	}
-
-	controllers {
-		^controllers.copy;
-	}
-
-	views {
-		^views.copy;
-	}
 }
