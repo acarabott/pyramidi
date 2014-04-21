@@ -684,7 +684,7 @@ PM_MIDI2OSCChannel {
             this.notify(\error, \settings,
                 "settings are not a Dictionary or IdentityDictionary"
             );
-            ^nil;
+            ^false;
         };
 
         aSettings.keysValuesDo { |key, value|
@@ -697,7 +697,8 @@ PM_MIDI2OSCChannel {
             "settings loaded"
         );
         this.notify(\update, \settingsLoaded, "");
-        ^this;
+
+        ^true;
     }
 
     free {
