@@ -29,6 +29,9 @@ PM_MIDI2OSCChannelController {
         };
         channel = aChannel;
         channel.controller = this;
+        if(view.notNil) {
+            view.update;
+        };
 
         this.debug(
             "Controller for:" + channel.name ++ Char.nl
@@ -48,9 +51,12 @@ PM_MIDI2OSCChannelController {
 
         view = aView;
         view.controller = this;
+        if(channel.notNil) {
+            view.update;
+        };
 
         this.debug(
-            "Controller for:" + channel.name ++ Char.nl
+            "Controller:" + this ++ Char.nl
             ++ Char.tab ++ "SET: view:" + view
         );
 
@@ -142,13 +148,13 @@ PM_MIDI2OSCChannelController {
                 "Controller for:" + channel.name ++ Char.nl
                 ++ Char.tab ++ "MIDI monitoring STARTED"
             );
+            midiMonitorRout.stop;
             midiMonitorRout = {
                 inf.do {
                     var val = channel.midiVal,
                         num = channel.midiNum;
 
-                    view['updateMidiMonitor'].(
-                    // view.updateMidiMonitor( //TODO swap this out
+                    view.updateMidiMonitor(
                         val.asString ++ if(num.isNil, "", ", " ++ num.asString)
                     );
                     0.1.wait;
@@ -160,6 +166,7 @@ PM_MIDI2OSCChannelController {
                 ++ Char.tab ++ "MIDI monitoring STOPPED"
             );
             midiMonitorRout.stop;
+            midiMonitorRout = nil;
         };
 
         ^this;

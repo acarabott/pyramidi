@@ -57,9 +57,10 @@ OSCdef(\hello, {|msg, time, addr, recvPort|
 
 
 ~channel = PM_MIDI2OSCChannel("rhodes");
-~view = PM_MIDI2OSCChannelView(Window("test"));
+~view = PM_MIDI2OSCChannelView(Window("Pyramidi", Rect(400, 400, 800, 800)).front);
 ~controller = PM_MIDI2OSCChannelController(~channel, ~view);
-~controller.view;
+~controller.view = ~view;
+~controller.channel = ~channel;
 ~view.controller;
 
 ~view.controller = "fuck"
