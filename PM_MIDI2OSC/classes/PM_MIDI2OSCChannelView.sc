@@ -20,6 +20,8 @@ PM_MIDI2OSCChannelView {
 	var testVal1Box;
 	var testVal2Box;
 	var testButton;
+	var copyButton;
+	var pasteButton;
 
 	*new {|aParentView|
 		^super.new.midi2oscChannelViewInit(aParentView);
@@ -42,6 +44,7 @@ PM_MIDI2OSCChannelView {
 		this.createOscAddressField;
 		this.createLatencyBox;
 		this.createTestControls;
+		this.createClipboardButtons;
 	}
 
 	createView {|aParentView|
@@ -56,7 +59,7 @@ PM_MIDI2OSCChannelView {
 			aParentView = nil;
 		};
 
-		view = View(aParentView, viewWidth@580);
+		view = View(aParentView, viewWidth@600);
 		view.addFlowLayout;
 		view.decorator.margin.x = margin;
 		view.decorator.margin.y = margin;
@@ -314,6 +317,35 @@ PM_MIDI2OSCChannelView {
 				};
 			});
 
+		view.decorator.nextLine;
+		^nil;
+	}
+
+	createClipboardButtons {
+		view.decorator.top = view.decorator.top + 20;
+		copyButton = Button(view, fullWidth@20)
+			.states_([
+				["Copy", Color.white, Color.black]
+			])
+			.action_({|butt|
+				if(controller.notNil) {
+					controller.copySettings;
+				};
+			});
+
+		view.decorator.nextLine;
+
+		pasteButton = Button(view, fullWidth@20)
+			.states_([
+				["Paste", Color.black, Color.yellow]
+			])
+			.action_({|butt|
+				if(controller.notNil) {
+					controller.pasteSettings;
+				};
+			});
+
+		view.decorator.nextLine;
 		^nil;
 	}
 
