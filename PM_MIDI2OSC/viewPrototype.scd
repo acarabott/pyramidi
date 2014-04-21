@@ -7,15 +7,16 @@
 ~channel = PM_MIDI2OSCChannel("rhodes");
 ~controller = PM_MIDI2OSCController(~channel);
 ~view = ();
-~controller.setView(~view);
+~controller.view = ~view;
 ~refreshDevices = {
-	~device.items = ~controller.getMidiSrcLabels;
+	~device.items = ~controller.midiSrcLabels;
 };
 ~vw = 150;
 if (v.notNil) {v.close};
 v = View(bounds:Rect(600, 800, ~vw, 530)).front;
 v.onClose = {
 	"closed".postln;
+	~controller.free;
 	~nameRout.stop;
 };
 v.addFlowLayout;
@@ -27,7 +28,7 @@ v.addFlowLayout;
 	.align_(\center)
 	.font_(Font.default.size = 25)
 	.action_({|field|
-		~controller.setName(field.string);
+		~controller.name = field.string;
 	});
 v.decorator.nextLine;
 ~enable = Button(v, ~full@20)
@@ -36,9 +37,9 @@ v.decorator.nextLine;
 		["on", Color.black, Color.green]
 	])
 	.action_({|butt|
-		~controller.setEnabled = butt.value == 1;
+		~controller.enabled = (butt.value == 1);
 	});
-~enable.value = if(~controller.getEnabled, 1, 0);
+~enable.value = if(~controller.enabled, 1, 0);
 
 v.decorator.nextLine;
 
@@ -49,9 +50,9 @@ StaticText(v, ~full@20)
 v.decorator.nextLine;
 
 ~device = PopUpMenu(v, ~full@20)
-	.items_(~controller.getMidiSrcLabels)
+	.items_(~controller.midiSrcLabels)
 	.action_({|menu|
-		~controller.setMidiSrc(menu.value);
+		~controller.midiSrc = menu.value;
 	});
 
 v.decorator.nextLine;
@@ -63,11 +64,11 @@ StaticText(v, ~full@20)
 v.decorator.nextLine;
 
 ~midiChannel = PopUpMenu(v, ~full@20)
-	.items_(~controller.getMidiChannels.collect {|x|
+	.items_(~controller.midiChannels.collect {|x|
 		if(x.isNil) { "all" } { (x + 1).asString };
 	})
 	.action_({|menu|
-		~controller.setMidiChannel(menu.value);
+		~controller.midiChannel = menu.value;
 	});
 
 v.decorator.nextLine;
@@ -77,12 +78,12 @@ StaticText(v, ~full@20)
 	.align_(\center);
 
 ~midiMsgType = PopUpMenu(v, ~full@20)
-	.value_(~controller.getMidiMsgType)
-	.items_(~controller.getMidiMsgTypes)
+	.value_(~controller.midiMsgType)
+	.items_(~controller.midiMsgTypes)
 	.action_({|menu|
 		var sym = menu.item.asSymbol;
-		~controller.setMidiMsgType(sym);
-		~testVal2.visible = ~controller.getMidiNonNumTypes.includes(sym).not;
+		~controller.midiMsgType = sym;
+		~testVal2.visible = ~controller.midiNonNumTypes.includes(sym).not;
 	});
 // ~midiMsgType.valueAction = 3;
 
@@ -125,10 +126,10 @@ StaticText(v, ~full@20)
 v.decorator.nextLine;
 
 ~ip = TextField(v, ~vw - (~m * 2)@20)
-	.string_(~controller.getIp)
+	.string_(~controller.ip)
 	.align_(\center)
 	.action_({|field|
-		~controller.setIp(field.string);
+		~controller.ip = field.string;
 	});
 
 v.decorator.nextLine;
@@ -140,13 +141,13 @@ StaticText(v, ~full@20)
 v.decorator.nextLine;
 
 ~port = NumberBox(v, ~full@20)
-	.value_(~controller.getPort ?? {0})
+	.value_(~controller.port ?? {0})
 	.clipLo_(0)
 	.clipHi_(65535)
 	.decimals_(0)
 	.align_(\center)
 	.action_({ |box|
-		~controller.setPort(box.value.asInteger);
+		~controller.port = box.value.asInteger;
 	});
 
 v.decorator.nextLine;
@@ -159,10 +160,10 @@ v.decorator.nextLine;
 
 
 ~oscAddress = TextField(v, ~full@20)
-	.string_(~controller.getOscAddress)
+	.string_(~controller.oscAddress)
 	.align_(\center)
 	.action_({|field|
-		~controller.setOSCAddress(field.string);
+		~controller.oscAddress = field.string;
 	});
 
 v.decorator.nextLine;
@@ -174,13 +175,13 @@ StaticText(v, ~full@20)
 v.decorator.nextLine;
 
 ~latency = NumberBox(v, ~full@20)
-	.value_(~controller.getLatency)
+	.value_(~controller.latency)
 	.clipLo_(0)
 	.clipHi_(60)
 	.decimals_(3)
 	.align_(\center)
 	.action_({|box|
-		~controller.setLatency(box.value);
+		~controller.latency = box.value;
 	});
 
 v.decorator.nextLine;
@@ -192,23 +193,23 @@ StaticText(v, ~full@20)
 v.decorator.nextLine;
 
 ~testVal1 = NumberBox(v, (~full * 0.5)-(~m * 0.5)@20)
-	.value_(~controller.getTestVal1)
+	.value_(~controller.testVal1)
 	.align_(\center)
 	.decimals_(0)
 	.clipLo_(0)
 	.clipHi_(127)
 	.action_({|box|
-		~controller.setTestVal1(box.value.asInteger);
+		~controller.testVal1 = box.value.asInteger;
 	});
 
 ~testVal2 = NumberBox(v, (~full * 0.5)-(~m * 0.5)@20)
-	.value_(~controller.getTestVal2)
+	.value_(~controller.testVal2)
 	.align_(\center)
 	.decimals_(0)
 	.clipLo_(0)
 	.clipHi_(127)
 	.action_({|box|
-		~controller.setTestVal2(box.value.asInteger);
+		~controller.testVal2 = box.value.asInteger;
 	});
 
 v.decorator.nextLine;

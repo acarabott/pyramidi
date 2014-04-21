@@ -1,6 +1,6 @@
 PM_MIDI2OSCController { // rename PM_MIDI2OSCChannelController ?
-    var <channel;
-    var <>view;
+    var channel;
+    var view;
     var midiMonitorRout;
 
     // TODO have routine that checks text fields for matches
@@ -34,7 +34,7 @@ PM_MIDI2OSCController { // rename PM_MIDI2OSCChannelController ?
         ^this;
     }
 
-    setView {|aView|
+    view_ {|aView|
         // TODO remove when class implemented
         // if(aView.isKindOf(PM_MIDI2OSCChannelView).not) {
         //     this.error(\view,
@@ -54,55 +54,60 @@ PM_MIDI2OSCController { // rename PM_MIDI2OSCChannelController ?
         ^this;
     }
 
-    getName {
+    name {
         ^channel.name;
     }
 
-    setName {|aName|
+    name_ {|aName|
         channel.name = aName;
+        ^this;
     }
 
-    getEnabled {
+    enabled {
         ^channel.enabled;
     }
 
-    setEnabled_ {|aEnabled|
-        ^channel.enabled = aEnabled;
+    enabled_ {|aEnabled|
+        channel.enabled = aEnabled;
+        ^this;
     }
 
-    getMidiSrcIDs {
+    midiSrcIDs {
         ^channel.midiSrcIDs;
     }
 
-    getMidiSrcLabels {
+    midiSrcLabels {
         ^channel.midiSrcLabels;
     }
 
-    setMidiSrc {|aMidiSrcIndex|
-        ^channel.midiSrcID = this.getMidiSrcIDs[aMidiSrcIndex];
+    midiSrc_ {|aMidiSrcIndex|
+        channel.midiSrcID = this.midiSrcIDs[aMidiSrcIndex];
+        ^this;
     }
 
-    getMidiChannels {
+    midiChannels {
         ^channel.class.midiChannels;
     }
 
-    setMidiChannel {|aMidiChannelIndex|
-        ^channel.midiChannel = this.getMidiChannels[aMidiChannelIndex];
+    midiChannel_ {|aMidiChannelIndex|
+        channel.midiChannel = this.midiChannels[aMidiChannelIndex];
+        ^this;
     }
 
-    getMidiMsgTypes {
+    midiMsgTypes {
         ^channel.class.midiMsgTypes;
     }
 
-    getMidiMsgType {
+    midiMsgType {
         ^channel.midiMsgType;
     }
 
-    setMidiMsgType {|aMidiMsgType|
-        ^channel.midiMsgType = aMidiMsgType
+    midiMsgType_ {|aMidiMsgType|
+        channel.midiMsgType = aMidiMsgType;
+        ^this;
     }
 
-    getMidiNonNumTypes {
+    midiNonNumTypes {
         ^channel.class.midiNonNumTypes;
     }
 
@@ -131,54 +136,60 @@ PM_MIDI2OSCController { // rename PM_MIDI2OSCChannelController ?
             );
             midiMonitorRout.stop;
         };
+
+        ^this;
     }
 
-    getIp {
+    ip {
         ^channel.ip;
     }
 
-    setIp {|aIp|
-        ^channel.ip = aIp;
+    ip_ {|aIp|
+        channel.ip = aIp;
+        ^this;
     }
 
-    getPort {
+    port {
         ^channel.port;
     }
 
-    setPort {|aPort|
-        ^channel.port = aPort;
+    port_ {|aPort|
+        channel.port = aPort;
+        ^this;
     }
 
-    getOscAddress {
+    oscAddress {
         ^channel.oscAddress;
     }
 
-    setOSCAddress {|aOscAddress|
-        ^channel.oscAddress = aOscAddress;
+    oscAddress_ {|aOscAddress|
+        channel.oscAddress = aOscAddress;
+        ^this;
     }
 
-    getLatency {
+    latency {
         ^channel.latency;
     }
 
-    setLatency {|aLatency|
-        ^channel.latency = aLatency;
+    latency_ {|aLatency|
+        channel.latency = aLatency;
+        ^this;
     }
 
-    getTestVal1 {
+    testVal1 {
         ^channel.testVal1;
     }
 
-    getTestVal2 {
+    testVal2 {
         ^channel.testVal2;
     }
 
-    setTestVal1 {|aTestVal|
+    testVal1_ {|aTestVal|
         channel.testVal1 = aTestVal;
         ^this;
     }
 
-    setTestVal2 {|aTestVal|
+    testVal2_ {|aTestVal|
         channel.testVal2 = aTestVal;
         ^this;
     }
