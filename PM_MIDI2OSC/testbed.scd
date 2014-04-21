@@ -56,6 +56,19 @@ OSCdef(\hello, {|msg, time, addr, recvPort|
 }, '/program');
 
 
+~window = Window("Pyramidi", Rect(100, 300, 1600, 700)).front;
+~window.addFlowLayout;
+
+~channels = 	IdentityDictionary[];
+~views = 		IdentityDictionary[];
+~controllers = 	IdentityDictionary[];
+
+([\rhodes, \drums] ++ (1..6).collect {|x| ("guitar" ++ x).asSymbol}).do {|key|
+	~channels[key] = 	PM_MIDI2OSCChannel(key.asString);
+	~views[key]	= 		PM_MIDI2OSCChannelView(~window);
+	~controllers[key] =	PM_MIDI2OSCChannelController(~channels[key], ~views[key]);
+}
+
 ~channel = PM_MIDI2OSCChannel("rhodes");
 ~view = PM_MIDI2OSCChannelView(Window("Pyramidi", Rect(400, 400, 800, 800)).front);
 ~controller = PM_MIDI2OSCChannelController(~channel, ~view);
@@ -65,7 +78,7 @@ OSCdef(\hello, {|msg, time, addr, recvPort|
 ~controller.debugEnabled = false;
 ~channel.debugEnabled = false;
 
-thisProcess.openUDPPort(6666);
+thisProcess.openUDPPort(65432);
 
 
 OSCdef(\hello, {|msg, time, addr, recvPort|
