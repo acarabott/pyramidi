@@ -2,8 +2,6 @@
 ~channel.enabled
 ~channel.free;
 
-// HERE: on startup, not receiving MIDI, becaues checking if netaddr exists
-// HERE: on creating netAddr, not activating, because MIDI func doesn't exist
 (
 
 ~channel = PM_MIDI2OSCChannel("rhodes");

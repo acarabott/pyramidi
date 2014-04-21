@@ -95,7 +95,6 @@ PM_MIDI2OSCChannel {
         controller =        nil;
 
         this.initMidi;
-        this.createMidiFuncCallback;
     }
 
     name_ {|aName|
@@ -149,6 +148,9 @@ PM_MIDI2OSCChannel {
                 _.device + ":" + _.name;
             );
         };
+
+        this.createMidiFuncCallback;
+        this.createMidiFunc;
     }
 
     midiSrcIDs {
@@ -380,7 +382,7 @@ PM_MIDI2OSCChannel {
     createMidiFuncCallback {
         if(midiNonNumTypes.includes(midiMsgType)) {
             midiFuncCallback = {|val, chan, src|
-                if(enabled) {
+                if(enabled && netAddr.notNil) {
                     SystemClock.sched(latency, {
                         netAddr.sendMsg(oscAddress, val);
 
@@ -397,7 +399,7 @@ PM_MIDI2OSCChannel {
             };
         } {
             midiFuncCallback = {|val, num, chan, src|
-                if(enabled) {
+                if(enabled && netAddr.notNil) {
                     SystemClock.sched(latency, {
                         netAddr.sendMsg(oscAddress, num, val);
 
@@ -424,13 +426,6 @@ PM_MIDI2OSCChannel {
     createMidiFunc {
         var func;
 
-        if(netAddr.isNil) {
-            this.notify(\error, \ip,
-                "ip or port not set"
-            );
-            this.notify(\error, \port, "");
-            ^nil;
-        };
         if(midiChannels.includes(midiChannel).not) {
             this.notify(\error, \key,
                 "MIDI channel not set"
