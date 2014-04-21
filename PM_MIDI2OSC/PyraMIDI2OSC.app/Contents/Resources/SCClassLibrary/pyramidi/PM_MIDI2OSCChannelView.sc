@@ -22,6 +22,8 @@ PM_MIDI2OSCChannelView {
 	var testButton;
 	var copyButton;
 	var pasteButton;
+	var saveButton;
+	var loadButton;
 
 	*new {|aParentView|
 		^super.new.midi2oscChannelViewInit(aParentView);
@@ -45,6 +47,7 @@ PM_MIDI2OSCChannelView {
 		this.createLatencyBox;
 		this.createTestControls;
 		this.createClipboardButtons;
+		this.createSaveLoadButtons;
 	}
 
 	createView {|aParentView|
@@ -59,7 +62,7 @@ PM_MIDI2OSCChannelView {
 			aParentView = nil;
 		};
 
-		view = View(aParentView, viewWidth@600);
+		view = View(aParentView, viewWidth@660);
 		view.addFlowLayout;
 		view.decorator.margin.x = margin;
 		view.decorator.margin.y = margin;
@@ -343,6 +346,31 @@ PM_MIDI2OSCChannelView {
 				if(controller.notNil) {
 					controller.pasteSettings;
 				};
+			});
+
+		view.decorator.nextLine;
+		^nil;
+	}
+
+	createSaveLoadButtons {
+		view.decorator.top = view.decorator.top + 20;
+
+		saveButton = Button(view, fullWidth@20)
+			.states_([
+				["Save", Color.black, Color.white]
+			])
+			.action_({|butt|
+				controller.saveSettings;
+			});
+
+		view.decorator.nextLine;
+
+		loadButton = Button(view, fullWidth@20)
+			.states_([
+				["Load", Color.white, Color.black]
+			])
+			.action_({|butt|
+				controller.loadSettings;
 			});
 
 		view.decorator.nextLine;

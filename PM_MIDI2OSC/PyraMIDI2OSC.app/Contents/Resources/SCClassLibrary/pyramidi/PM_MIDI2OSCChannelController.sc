@@ -253,6 +253,34 @@ PM_MIDI2OSCChannelController {
         ^this;
     }
 
+    saveSettings {
+        Dialog.savePanel {|path|
+            channel.storedSettings.writeArchive(path);
+            this.update(\save,
+                "settings saved at: " ++ Char.nl
+                ++ Char.tab ++ path
+            );
+        } {
+            this.update(\save,
+                "settings not saved"
+            );
+        };
+
+        ^nil;
+    }
+
+    loadSettings {
+        Dialog.openPanel {|path|
+            channel.loadSettings(Object.readArchive(path));
+        } {
+            this.warning(\load,
+                "settings not loaded"
+            );
+        };
+
+        ^nil;
+    }
+
     error {|key, string|
 
         switch (key)
