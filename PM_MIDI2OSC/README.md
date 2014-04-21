@@ -15,19 +15,5 @@
 
 ### PM_MIDI2OSCController
 
-- MVC Controller 
+- MVC Controller
 
-## TODO
-
-### PM_MIDI2OSCChannel
-
-- Creating MIDIFunc
-- OSC address customisation
-- Data transfer function
-- Method to get all saveable settings
-- Loading / creating from settings
-- Sending test signals
-
-### PM_MIDI2OSCView
-
-- GUI!
