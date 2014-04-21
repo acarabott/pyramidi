@@ -89,3 +89,9 @@ OSCdef(\hello, {|msg, time, addr, recvPort|
 
 
 a = PM_MIDI2OSC();
+
+~settings = a.channels[0].storedSettings;
+
+a.channels[1].loadSettings(~settings);
+
+a.views[1].update

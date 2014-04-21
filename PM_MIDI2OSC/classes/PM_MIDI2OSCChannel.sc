@@ -6,6 +6,7 @@ PM_MIDI2OSCChannel {
     classvar midiSrcLabels;
     classvar controllerMethods;
     classvar defaultPort;
+    classvar settingsKeys;
 
     var <name;
     var <enabled;
@@ -24,6 +25,8 @@ PM_MIDI2OSCChannel {
     var <testVal1;
     var <testVal2;
     var <controller;
+
+    var storedSettings;
     var <>debugEnabled = false;
 
     /*
@@ -52,6 +55,21 @@ PM_MIDI2OSCChannel {
         ];
 
         defaultPort = 1234;
+
+        settingsKeys = #[
+            'name',
+            'enabled',
+            'midiChannel',
+            'midiMsgType',
+            'midiSrcID',
+            'midiNotifying',
+            'ip',
+            'port',
+            'oscAddress',
+            'latency',
+            'testVal1',
+            'testVal2'
+        ];
     }
 
     *new {|aName|
@@ -99,6 +117,7 @@ PM_MIDI2OSCChannel {
         testVal1 =          0;
         testVal2 =          0;
         controller =        nil;
+        storedSettings =    IdentityDictionary[];
 
         this.initMidi;
     }
@@ -632,6 +651,44 @@ PM_MIDI2OSCChannel {
             this.class.printMessage(type.asString.toUpper, string);
         };
 
+        ^this;
+    }
+
+    storedSettings {
+        this.storeSettings;
+        ^storedSettings.copy;
+    }
+
+    storeSettings {
+        storedSettings['name'] = name;
+        storedSettings['enabled'] = enabled;
+        storedSettings['midiChannel'] = midiChannel;
+        storedSettings['midiMsgType'] = midiMsgType;
+        storedSettings['midiSrcID'] = midiSrcID;
+        storedSettings['midiNotifying'] = midiNotifying;
+        storedSettings['ip'] = ip;
+        storedSettings['port'] = port;
+        storedSettings['oscAddress'] = oscAddress;
+        storedSettings['latency'] = latency;
+        storedSettings['testVal1'] = testVal1;
+        storedSettings['testVal2'] = testVal2;
+    }
+
+    loadSettings {|aSettings|
+        if(aSettings.isKindOf(Dictionary).not) {
+            this.notify(\error, \settings,
+                "settings are not a Dictionary or IdentityDictionary"
+            );
+            ^nil;
+        };
+
+        aSettings.keysValuesDo { |key, value|
+            if(settingsKeys.includes(key)) {
+                this.perform((key ++ "_").asSymbol, value);
+            };
+        };
+
+        this.notify(\update, \settingsLoaded, "");
         ^this;
     }
 

@@ -226,7 +226,8 @@ PM_MIDI2OSCChannelController {
 
     update {|key, string|
         switch (key)
-            {\midiChanged}    { view.updateMidiMonitor(string); };
+            {\midiChanged}    { view.updateMidiMonitor(string); }
+            {\settingsLoaded} { view.update; };
     }
 
     debug {|string|
