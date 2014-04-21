@@ -221,6 +221,15 @@ PM_MIDI2OSCChannelController {
         ^channel.sendTestSignal;
     }
 
+    getSettings {
+        ^channel.storedSettings;
+    }
+
+    loadSettings {|aSettings|
+        channel.loadSettings(aSettings);
+        ^this;
+    }
+
     copySettings {
         if(parent.isNil) {
             this.error(\parent,
@@ -253,7 +262,7 @@ PM_MIDI2OSCChannelController {
         ^this;
     }
 
-    saveSettings {
+    saveSettingsToFile {
         Dialog.savePanel {|path|
             channel.storedSettings.writeArchive(path);
             this.update(\save,
@@ -269,7 +278,7 @@ PM_MIDI2OSCChannelController {
         ^nil;
     }
 
-    loadSettings {
+    loadSettingsFromFile {
         Dialog.openPanel {|path|
             channel.loadSettings(Object.readArchive(path));
         } {
@@ -316,6 +325,7 @@ PM_MIDI2OSCChannelController {
              << Char.nl;
     }
 
-    free {
+    freeChannel {
+        channel.free;
     }
 }

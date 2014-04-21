@@ -16,6 +16,7 @@ PM_MIDI2OSC {
 
 		this.createWindow;
 		this.createAddButton;
+		this.createSaveLoadButtons;
 		this.createTitle;
 	}
 
@@ -29,8 +30,8 @@ PM_MIDI2OSC {
 			.name_("Pyramidi MIDI to OSC")
 			.bounds_(Rect(x, y, width, height))
 			.onClose_({
-				channels.do {|channel|
-					channel.free;
+				controllers.do {|controller|
+					controller.freeChannel;
 				};
 			})
 			.userCanClose_(false)
@@ -48,15 +49,34 @@ PM_MIDI2OSC {
 				["+", Color.white, Color.black]
 			])
 			.action_({|butt|
-				this.addChannel("channel" ++ channels.size);
+				this.addChannel("channel" ++ (channels.size + 1));
 			});
 
 		^this;
 	}
 
+	createSaveLoadButtons {
+		Button(window, 140@70)
+			.font_(Font.default.size = 30)
+			.states_([
+				["Save All", Color.black, Color.white],
+			])
+			.action_({|butt|
+				this.saveAll;
+			});
+		Button(window, 140@70)
+			.font_(Font.default.size = 30)
+			.states_([
+				["Load All", Color.white, Color.black],
+			])
+			.action_({|butt|
+				this.loadAll;
+			});
+	}
+
 	createTitle {
-		StaticText(window, 1100@70)
-			.align_(\center)
+		StaticText(window, 500@70)
+			.align_(\right)
 			.string_("Pyramidi MIDI to OSC")
 			.font_(Font.default.size = 40);
 
@@ -71,5 +91,27 @@ PM_MIDI2OSC {
 		);
 
 		controllers.last.parent = this;
+	}
+
+	saveAll {
+		var settings = controllers.collect {|controller|
+			controller.getSettings
+		};
+
+		Dialog.savePanel {|path|
+		    settings.writeArchive(path);
+		};
+
+		^nil;
+	}
+
+	loadAll {
+		Dialog.openPanel {|path|
+			Object.readArchive(path).do {|setting|
+				setting.postln;
+				this.addChannel(setting['name']);
+				controllers.last.loadSettings(setting);
+			}
+		};
 	}
 }
