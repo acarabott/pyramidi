@@ -86,3 +86,6 @@ OSCdef(\hello, {|msg, time, addr, recvPort|
 		 << "velocity:".padRight(len) << msg[2] << Char.nl;
 }, '/noteOn');
 
+
+
+a = PM_MIDI2OSC();

@@ -32,6 +32,7 @@ PM_MIDI2OSC {
 					channel.free;
 				};
 			})
+			.userCanClose_(false)
 			.front;
 
 		window.addFlowLayout;
