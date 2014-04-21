@@ -1,9 +1,10 @@
-PM_MIDI2OSCController { // rename PM_MIDI2OSCChannelController ?
+PM_MIDI2OSCChannelController {
     var channel;
     var view;
     var midiMonitorRout;
 
     // TODO have routine that checks text fields for matches
+    // these should check if the view is actually visible
     *initClass {
     }
 

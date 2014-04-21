@@ -5,7 +5,7 @@
 (
 
 ~channel = PM_MIDI2OSCChannel("rhodes");
-~controller = PM_MIDI2OSCController(~channel);
+~controller = PM_MIDI2OSCChannelController(~channel);
 ~view = ();
 ~controller.view = ~view;
 ~refreshDevices = {
