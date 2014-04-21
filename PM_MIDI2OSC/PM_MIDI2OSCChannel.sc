@@ -51,7 +51,7 @@ PM_MIDI2OSCChannel {
             \debug ->   [\this, \string]
         ];
 
-        defaultPort = 65432;
+        defaultPort = 1234;
     }
 
     *new {|aName|
