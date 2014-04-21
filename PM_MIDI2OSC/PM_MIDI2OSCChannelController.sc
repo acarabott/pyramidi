@@ -57,61 +57,83 @@ PM_MIDI2OSCChannelController {
         ^this;
     }
 
-    name {
+    getName {
         ^channel.name;
     }
 
-    name_ {|aName|
+    setName {|aName|
         channel.name = aName;
         ^this;
     }
 
-    enabled {
+    getEnabled {
         ^channel.enabled;
     }
 
-    enabled_ {|aEnabled|
+    setEnabled {|aEnabled|
         channel.enabled = aEnabled;
         ^this;
     }
 
-    midiSrcIDs {
+    getMidiSrcIDs {
         ^channel.midiSrcIDs;
     }
 
-    midiSrcLabels {
+    getMidiSrcLabels {
         ^channel.midiSrcLabels;
     }
 
-    midiSrc_ {|aMidiSrcIndex|
-        channel.midiSrcID = this.midiSrcIDs[aMidiSrcIndex];
+    getMidiSrcIndex {
+        ^channel.midiSrcIDs.indexOf(channel.midiSrcID);
+    }
+
+    setMidiSrc {|aMidiSrcIndex|
+        channel.midiSrcID = channel.midiSrcIDs[aMidiSrcIndex];
         ^this;
     }
 
-    midiChannels {
-        ^channel.class.midiChannels;
+    getMidiChannels {
+        ^channel.midiChannels;
     }
 
-    midiChannel_ {|aMidiChannelIndex|
-        channel.midiChannel = this.midiChannels[aMidiChannelIndex];
+    setMidiChannelFromIndex {|aMidiChannelIndex|
+        channel.midiChannel = channel.midiChannels[aMidiChannelIndex];
         ^this;
     }
 
-    midiMsgTypes {
-        ^channel.class.midiMsgTypes;
+    getMidiChannelLabels {
+        ^channel.midiChannels.collect {|x|
+            if(x.isNil) {
+                "all"
+            } {
+                (x + 1).asString;
+            };
+        };
     }
 
-    midiMsgType {
+    getMidiChannelIndex {
+        ^channel.midiChannels.indexOf(channel.midiChannel);
+    }
+
+    getMidiMsgTypes {
+        ^channel.midiMsgTypes;
+    }
+
+    getMidiMsgType {
         ^channel.midiMsgType;
     }
 
-    midiMsgType_ {|aMidiMsgType|
+    setMidiMsgType {|aMidiMsgType|
         channel.midiMsgType = aMidiMsgType;
         ^this;
     }
 
-    midiNonNumTypes {
-        ^channel.class.midiNonNumTypes;
+    getMidiMsgTypeIndex {
+        ^channel.midiMsgTypes.indexOf(channel.midiMsgType);
+    }
+
+    getMidiNonNumTypes {
+        ^channel.midiNonNumTypes;
     }
 
     monitorMidi_ {|aMonitorMidi|
@@ -143,56 +165,60 @@ PM_MIDI2OSCChannelController {
         ^this;
     }
 
-    ip {
+    isMonitoring {
+        ^midiMonitorRout.isNil.not;
+    }
+
+    getIp {
         ^channel.ip;
     }
 
-    ip_ {|aIp|
+    setIp {|aIp|
         channel.ip = aIp;
         ^this;
     }
 
-    port {
+    getPort {
         ^channel.port;
     }
 
-    port_ {|aPort|
+    setPort {|aPort|
         channel.port = aPort;
         ^this;
     }
 
-    oscAddress {
+    getOscAddress {
         ^channel.oscAddress;
     }
 
-    oscAddress_ {|aOscAddress|
+    setOscAddress {|aOscAddress|
         channel.oscAddress = aOscAddress;
         ^this;
     }
 
-    latency {
+    getLatency {
         ^channel.latency;
     }
 
-    latency_ {|aLatency|
+    setLatency {|aLatency|
         channel.latency = aLatency;
         ^this;
     }
 
-    testVal1 {
+    getTestVal1 {
         ^channel.testVal1;
     }
 
-    testVal2 {
+    getTestVal2 {
         ^channel.testVal2;
     }
 
-    testVal1_ {|aTestVal|
+    setTestVal1 {|aTestVal|
         channel.testVal1 = aTestVal;
         ^this;
     }
 
-    testVal2_ {|aTestVal|
+    setTestVal2 {|aTestVal|
         channel.testVal2 = aTestVal;
         ^this;
     }
