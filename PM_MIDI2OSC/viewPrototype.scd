@@ -87,6 +87,8 @@ StaticText(v, ~full@20)
 	});
 // ~midiMsgType.valueAction = 3;
 
+~midiMsgType.value = 2
+
 v.decorator.nextLine;
 
 StaticText(v, ~full@20)
@@ -221,3 +223,43 @@ v.decorator.nextLine;
 		~controller.sendTestSignal;
 	});
 );
+
+
+
+
+
+(
+if(~window.notNil) {~window.close};
+~window = Window("Pyramidi", Rect(100, 300, 1260, 700), scroll:true).front;
+~window.addFlowLayout;
+
+~window.onClose = {
+	~channels.do {|channel, i|
+		channel.free;
+	};
+};
+~channels = 	List[];
+~views = 		List[];
+~controllers = 	List[];
+
+~addButton = Button(~window, 70@70)
+	.font_(Font.default.size = 40)
+	.states_([
+		["+", Color.white, Color.black],
+	])
+	.action_({|butt|
+		~channels.add(PM_MIDI2OSCChannel("name" ++ ~channels.size.asString));
+		~views.add(PM_MIDI2OSCChannelView(~window));
+		~controllers.add(PM_MIDI2OSCChannelController(~channels.last, ~views.last));
+	});
+
+
+~title = StaticText(~window, 1100@70)
+	.align_(\center)
+	.string_("Pyramidi MIDI to OSC")
+	.font_(Font.default.size = 40);
+
+~window.view.decorator.nextLine;
+
+);
+
