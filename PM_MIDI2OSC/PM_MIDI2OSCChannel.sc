@@ -1,7 +1,7 @@
 PM_MIDI2OSCChannel {
-    classvar <midiChannels;
-    classvar <midiMsgTypes;
-    classvar <midiNonNumTypes;
+    classvar midiChannels;
+    classvar midiMsgTypes;
+    classvar midiNonNumTypes;
     classvar midiSrcIDs;
     classvar midiSrcLabels;
     classvar controllerMethods;
@@ -158,13 +158,16 @@ PM_MIDI2OSCChannel {
     }
 
     midiSrcIDs {
-        this.initMidi;
         ^midiSrcIDs.copy;
     }
 
     midiSrcLabels {
-        this.initMidi;
         ^midiSrcLabels.copy;
+    }
+
+    midiChannels {
+        // shortcut for classvar
+        ^midiChannels.copy;
     }
 
     midiChannel_ {|aMidiChannel|
@@ -186,6 +189,16 @@ PM_MIDI2OSCChannel {
         );
 
         ^this;
+    }
+
+    midiMsgTypes {
+        // shortcut for classvar
+        ^midiMsgTypes.copy;
+    }
+
+    midiNonNumTypes {
+        // shortcut for classvar
+        ^midiNonNumTypes.copy;
     }
 
     midiMsgType_ {|aMidiMsgType|
