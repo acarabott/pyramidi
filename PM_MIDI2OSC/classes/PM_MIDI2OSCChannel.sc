@@ -672,6 +672,11 @@ PM_MIDI2OSCChannel {
         storedSettings['latency'] = latency;
         storedSettings['testVal1'] = testVal1;
         storedSettings['testVal2'] = testVal2;
+
+
+        this.notify(\debug, \settings,
+            "stored settings"
+        );
     }
 
     loadSettings {|aSettings|
@@ -688,6 +693,9 @@ PM_MIDI2OSCChannel {
             };
         };
 
+        this.notify(\debug, \settings,
+            "settings loaded"
+        );
         this.notify(\update, \settingsLoaded, "");
         ^this;
     }

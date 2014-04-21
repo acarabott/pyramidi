@@ -2,6 +2,7 @@ PM_MIDI2OSCChannelController {
     var channel;
     var <view;
     var <>debugEnabled = false;
+    var parent;
 
     // TODO have routine that checks text fields for matches
     // these should check if the view is actually visible
@@ -59,6 +60,18 @@ PM_MIDI2OSCChannelController {
             ++ Char.tab ++ "SET: view:" + view
         );
 
+        ^this;
+    }
+
+    parent_ {|aParent|
+        if(aParent.isKindOf(PM_MIDI2OSC).not) {
+            this.error(\parent,
+                "parent needs to be a PM_MIDI2OSC"
+            );
+            ^this;
+        };
+
+        parent = aParent;
         ^this;
     }
 
@@ -206,6 +219,38 @@ PM_MIDI2OSCChannelController {
 
     sendTestSignal {
         ^channel.sendTestSignal;
+    }
+
+    copySettings {
+        if(parent.isNil) {
+            this.error(\parent,
+                "parent is nil"
+            );
+            ^nil;
+        };
+
+        parent.clipboard = channel.storedSettings;
+
+        ^nil;
+    }
+
+    pasteSettings {
+        if(parent.isNil) {
+            this.error(\parent,
+                "parent is nil"
+            );
+            ^nil;
+        };
+        if(parent.clipboard.isNil) {
+            this.error(\clipboard,
+                "clipboard is empty"
+            );
+            ^nil;
+        };
+
+        channel.loadSettings(parent.clipboard);
+
+        ^this;
     }
 
     error {|key, string|
