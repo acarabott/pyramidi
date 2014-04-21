@@ -328,7 +328,7 @@ PM_MIDI2OSCChannelView {
 		view.decorator.top = view.decorator.top + 20;
 		copyButton = Button(view, fullWidth@20)
 			.states_([
-				["Copy", Color.white, Color.black]
+				["Copy Channel", Color.white, Color.black]
 			])
 			.action_({|butt|
 				if(controller.notNil) {
@@ -340,7 +340,7 @@ PM_MIDI2OSCChannelView {
 
 		pasteButton = Button(view, fullWidth@20)
 			.states_([
-				["Paste", Color.black, Color.yellow]
+				["Paste Channel", Color.black, Color.yellow]
 			])
 			.action_({|butt|
 				if(controller.notNil) {
@@ -357,7 +357,7 @@ PM_MIDI2OSCChannelView {
 
 		saveButton = Button(view, fullWidth@20)
 			.states_([
-				["Save", Color.black, Color.white]
+				["Save Channel", Color.black, Color.white]
 			])
 			.action_({|butt|
 				controller.saveSettingsToFile;
@@ -367,7 +367,7 @@ PM_MIDI2OSCChannelView {
 
 		loadButton = Button(view, fullWidth@20)
 			.states_([
-				["Load", Color.white, Color.black]
+				["Load Channel", Color.white, Color.black]
 			])
 			.action_({|butt|
 				controller.loadSettingsFromFile;
