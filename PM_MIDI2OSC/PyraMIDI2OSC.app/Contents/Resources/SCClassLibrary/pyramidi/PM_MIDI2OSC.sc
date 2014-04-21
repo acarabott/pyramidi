@@ -3,6 +3,7 @@ PM_MIDI2OSC {
 	var controllers;
 	var views;
 	var window;
+	var <>clipboard;
 
 	*new {
 		^super.new.midi2oscInit;
@@ -68,5 +69,7 @@ PM_MIDI2OSC {
 		controllers.add(
 			PM_MIDI2OSCChannelController(channels.last, views.last)
 		);
+
+		controllers.last.parent = this;
 	}
 }
