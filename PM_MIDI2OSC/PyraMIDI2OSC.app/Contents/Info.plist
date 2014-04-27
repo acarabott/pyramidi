@@ -140,7 +140,7 @@
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
-	<string>PyraMIDI2OSC</string>
+	<string>SuperCollider Classic</string>
 	<key>CFBundleIconFile</key>
 	<string>SCcube</string>
 	<key>CFBundleIdentifier</key>
@@ -148,7 +148,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>PyraMIDI2OSC</string>
+	<string>SuperCollider Classic</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleSignature</key>
