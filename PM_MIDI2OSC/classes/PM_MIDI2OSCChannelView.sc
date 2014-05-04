@@ -34,6 +34,11 @@ PM_MIDI2OSCChannelView {
     var <ipField;
     var portBox;
     var <oscAddressField;
+    var mapInputMinBox;
+    var mapInputMaxBox;
+    var mapOutputMinBox;
+    var mapOutputMaxBox;
+    var outputTypeButton;
     var latencyBox;
     var testVal1Box;
     var testVal2Box;
@@ -62,6 +67,7 @@ PM_MIDI2OSCChannelView {
         this.createIpField;
         this.createPortBox;
         this.createOscAddressField;
+        this.createMappingControls;
         this.createLatencyBox;
         this.createTestControls;
         this.createClipboardButtons;
@@ -80,7 +86,7 @@ PM_MIDI2OSCChannelView {
             aParentView = nil;
         };
 
-        view = View(aParentView, viewWidth@660);
+        view = View(aParentView, viewWidth@830);
         view.addFlowLayout;
         view.decorator.margin.x = margin;
         view.decorator.margin.y = margin;
@@ -285,6 +291,95 @@ PM_MIDI2OSCChannelView {
         ^nil
     }
 
+    createMappingControls {
+        StaticText(view, fullWidth@20)
+            .string_("Value Mapping")
+            .font_(Font.default.size_(15).boldVariant)
+            .align_(\center);
+
+        view.decorator.nextLine;
+
+        StaticText(view, fullWidth@20)
+            .string_("Input")
+            .align_(\center);
+
+        view.decorator.nextLine;
+
+        mapInputMinBox = NumberBox(view, (fullWidth * 0.5) - (margin * 0.5)@20)
+            .align_(\center)
+            .decimals_(0)
+            .clipLo_(0)
+            .clipHi_(127)
+            .action_({|box|
+                if(controller.notNil) {
+                    controller.setMapInputMin(box.value.asInteger);
+                };
+            });
+
+        mapInputMaxBox = NumberBox(view, (fullWidth * 0.5) - (margin * 0.5)@20)
+            .align_(\center)
+            .decimals_(0)
+            .clipLo_(0)
+            .clipHi_(127)
+            .action_({|box|
+                if(controller.notNil) {
+                    controller.setMapInputMax(box.value.asInteger);
+                };
+            });
+
+        StaticText(view, fullWidth@20)
+            .string_("Output")
+            .align_(\center);
+
+        view.decorator.nextLine;
+
+        outputTypeButton = Button(view, fullWidth@20)
+            .states_([
+                ["Integer", Color.black, Color.white],
+                ["Float", Color.white, Color.black]
+            ])
+            .action_({|butt|
+                if(controller.notNil) {
+                    if(butt.value == 0) {
+                        controller.setOutputType(Integer);
+                    } {
+                        controller.setOutputType(Float);
+                    };
+                };
+
+                if(butt.value == 0) {
+                    mapOutputMinBox.decimals = 0;
+                    mapOutputMaxBox.decimals = 0;
+                } {
+                   mapOutputMinBox.decimals = 4;
+                   mapOutputMaxBox.decimals = 4;
+                }
+            });
+
+
+        mapOutputMinBox = NumberBox(view, (fullWidth * 0.5) - (margin * 0.5)@20)
+            .align_(\center)
+            .decimals_(0)
+            .action_({|box|
+                if(controller.notNil) {
+                    controller.setMapOutputMin(box.value.asInteger);
+                };
+            });
+
+        mapOutputMaxBox = NumberBox(view, (fullWidth * 0.5) - (margin * 0.5)@20)
+            .align_(\center)
+            .decimals_(0)
+            .action_({|box|
+                if(controller.notNil) {
+                    controller.setMapOutputMax(box.value.asInteger);
+                };
+            });
+
+        view.decorator.nextLine;
+
+        ^nil;
+    }
+
     createLatencyBox {
         StaticText(view, fullWidth@20)
             .string_("Latency")
@@ -317,8 +412,6 @@ PM_MIDI2OSCChannelView {
         testVal1Box = NumberBox(view, (fullWidth * 0.5) - (margin * 0.5)@20)
             .align_(\center)
             .decimals_(0)
-            .clipLo_(0)
-            .clipHi_(127)
             .action_({|box|
                 if(controller.notNil) {
                     controller.setTestVal1(box.value.asInteger);
@@ -328,8 +421,6 @@ PM_MIDI2OSCChannelView {
         testVal2Box = NumberBox(view, (fullWidth * 0.5) - (margin * 0.5)@20)
             .align_(\center)
             .decimals_(0)
-            .clipLo_(0)
-            .clipHi_(127)
             .action_({|box|
                 if(controller.notNil) {
                     controller.setTestVal2(box.value.asInteger);
@@ -432,8 +523,20 @@ PM_MIDI2OSCChannelView {
             portBox.value =                 controller.getPort;
             oscAddressField.string =        controller.getOscAddress;
             latencyBox.value =              controller.getLatency;
+            mapInputMinBox.value =          controller.getMapInputMin;
+            mapInputMaxBox.value =          controller.getMapInputMax;
+            mapOutputMinBox.value =         controller.getMapOutputMin;
+            mapOutputMaxBox.value =         controller.getMapOutputMax;
             testVal1Box.value =             controller.getTestVal1;
             testVal2Box.value =             controller.getTestVal2;
+
+            if(controller.getOutputType == Integer) {
+                outputTypeButton.value = 0;
+            } {
+                if(controller.getOutputType == Float) {
+                    outputTypeButton.value = 1;
+                };
+            };
         };
 
     }

@@ -39,6 +39,11 @@ PM_MIDI2OSCChannel {
     var port;
     var netAddr;
     var <oscAddress;
+    var <mapInputMin;
+    var <mapInputMax;
+    var <mapOutputMin;
+    var <mapOutputMax;
+    var <outputType;
     var <latency;
     var <testVal1;
     var <testVal2;
@@ -132,6 +137,11 @@ PM_MIDI2OSCChannel {
         midiNotifying =     false;
         oscAddress =        "/" ++ midiMsgType;
         port =              defaultPort;
+        mapInputMin =       0;
+        mapInputMax =       127;
+        mapOutputMin =      0;
+        mapOutputMax =      127;
+        outputType =        Integer;
         testVal1 =          0;
         testVal2 =          0;
         controller =        nil;
@@ -434,6 +444,56 @@ PM_MIDI2OSCChannel {
         ^this;
     }
 
+    mapInputMin_ {|aMapInputMin|
+        if(aMapInputMin.isInteger.not) {
+            this.notify(\error, \mapInputMin,
+                "Input range minimum must be an integer"
+            );
+            ^this;
+        };
+        mapInputMin = aMapInputMin;
+    }
+
+    mapInputMax_ {|aMapInputMax|
+        if(aMapInputMax.isInteger.not) {
+            this.notify(\error, \mapInputMax,
+                "Input range maximum must be an integer"
+            );
+            ^this;
+        };
+        mapInputMax = aMapInputMax;
+    }
+
+    mapOutputMin_ {|aMapOutputMin|
+        if(aMapOutputMin.isNumber.not) {
+            this.notify(\error, \mapOutputMin,
+                "Output range minimum must be a number"
+            );
+            ^this;
+        };
+        mapOutputMin = aMapOutputMin;
+    }
+
+    mapOutputMax_ {|aMapOutputMax|
+        if(aMapOutputMax.isNumber.not) {
+            this.notify(\error, \mapOutputMax,
+                "Output range maximum must be a number"
+            );
+            ^this;
+        };
+        mapOutputMax = aMapOutputMax;
+    }
+
+    outputType_ {|aOutputType|
+        if([Float, Integer].includes(aOutputType).not) {
+            this.notify(\error, \outputType,
+                "Output type is not Float or Integer"
+            );
+            ^this;
+        };
+        outputType = aOutputType;
+    }
+
     latency_ {|aLatency|
         if(aLatency.isNumber.not) {
             this.notify(\error, \latency,
@@ -463,6 +523,15 @@ PM_MIDI2OSCChannel {
             midiFuncCallback = {|val, chan, src|
                 if(enabled && netAddr.notNil) {
                     SystemClock.sched(latency, {
+
+                        val = val.linlin(
+                            mapInputMin, mapInputMax,
+                            mapOutputMin, mapOutputMax
+                        );
+
+                        if(outputType == Integer) {
+                            val = val.asInteger;
+                        };
                         netAddr.sendMsg(oscAddress, val);
 
                         this.notify(\debug, \sendMsg,
@@ -487,6 +556,15 @@ PM_MIDI2OSCChannel {
             midiFuncCallback = {|val, num, chan, src|
                 if(enabled && netAddr.notNil) {
                     SystemClock.sched(latency, {
+
+                        val = val.linlin(
+                            mapInputMin, mapInputMax,
+                            mapOutputMin, mapOutputMax
+                        );
+
+                        if(outputType == Integer) {
+                            val = val.asInteger;
+                        };
                         netAddr.sendMsg(oscAddress, num, val);
 
                         this.notify(\debug, \sendMsg,

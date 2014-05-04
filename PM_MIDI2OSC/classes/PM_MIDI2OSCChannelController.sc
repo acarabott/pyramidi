@@ -245,6 +245,51 @@ PM_MIDI2OSCChannelController {
         ^this;
     }
 
+    getMapInputMin {
+        ^channel.mapInputMin;
+    }
+
+    setMapInputMin {|aMapInputMin|
+        channel.mapInputMin = aMapInputMin;
+        ^this;
+    }
+
+    getMapInputMax {
+        ^channel.mapInputMax;
+    }
+
+    setMapInputMax {|aMapInputMax|
+        channel.mapInputMax = aMapInputMax;
+        ^this;
+    }
+
+    getMapOutputMin {
+        ^channel.mapOutputMin;
+    }
+
+    setMapOutputMin {|aMapOutputMin|
+        channel.mapOutputMin = aMapOutputMin;
+        ^this;
+    }
+
+    getMapOutputMax {
+        ^channel.mapOutputMax;
+    }
+
+    setMapOutputMax {|aMapOutputMax|
+        channel.mapOutputMax = aMapOutputMax;
+        ^this;
+    }
+
+    getOutputType {
+        ^channel.outputType;
+    }
+
+    setOutputType {|class|
+        channel.outputType = class;
+        ^this
+    }
+
     getLatency {
         ^channel.latency;
     }

@@ -40,7 +40,7 @@ PM_MIDI2OSC {
 
     createWindow {
         var width =     1260;
-        var height =    750;
+        var height =    900;
         var x =         (Window.screenBounds.width - width) * 0.5;
         var y =         (Window.screenBounds.height - height) * 0.5;
 
