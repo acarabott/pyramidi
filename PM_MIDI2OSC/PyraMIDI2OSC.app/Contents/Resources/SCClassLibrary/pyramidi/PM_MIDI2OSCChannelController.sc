@@ -22,8 +22,6 @@ PM_MIDI2OSCChannelController {
     var <>debugEnabled = false;
     var parent;
 
-    // TODO have routine that checks text fields for matches
-    // these should check if the view is actually visible
     *initClass {
     }
 
@@ -93,12 +91,45 @@ PM_MIDI2OSCChannelController {
         ^this;
     }
 
+    checkNameField {
+        if(channel.name.asSymbol != view.nameField.string.asSymbol) {
+            view.nameField.stringColor_(Color.red);
+        } {
+           view.nameField.stringColor_(Color.black);
+        };
+    }
+
+    checkIpField {
+        if(channel.ip.asSymbol != view.ipField.string.asSymbol) {
+            view.ipField.stringColor_(Color.red);
+        } {
+            view.ipField.stringColor_(Color.black);
+        };
+    }
+
+    checkOscAddressField {
+        if(channel.oscAddress.asSymbol != view.oscAddressField.string.asSymbol) {
+            view.oscAddressField.stringColor_(Color.red);
+        } {
+            view.oscAddressField.stringColor_(Color.black);
+        };
+    }
+
+    checkTextFields {
+        this.checkNameField();
+        this.checkIpField();
+        this.checkOscAddressField();
+    }
+
     getName {
         ^channel.name;
     }
 
     setName {|aName|
         channel.name = aName;
+        if(view.notNil) {
+            this.checkNameField();
+        };
         ^this;
     }
 
@@ -187,6 +218,9 @@ PM_MIDI2OSCChannelController {
 
     setIp {|aIp|
         channel.ip = aIp;
+        if(view.notNil) {
+            this.checkIpField();
+        };
         ^this;
     }
 
@@ -205,6 +239,9 @@ PM_MIDI2OSCChannelController {
 
     setOscAddress {|aOscAddress|
         channel.oscAddress = aOscAddress;
+        if(view.notNil) {
+            this.checkOscAddressField();
+        };
         ^this;
     }
 

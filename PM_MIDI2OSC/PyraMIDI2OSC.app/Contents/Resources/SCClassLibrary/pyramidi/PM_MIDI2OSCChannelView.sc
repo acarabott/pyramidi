@@ -24,16 +24,16 @@ PM_MIDI2OSCChannelView {
 
     var <controller;
 
-    var nameField;
+    var <nameField;
     var enableButton;
     var deviceMenu;
     var midiChannelMenu;
     var midiMsgTypeMenu;
     var midiMonitorText;
     var midiEnableMonitorButton;
-    var ipField;
+    var <ipField;
     var portBox;
-    var oscAddressField;
+    var <oscAddressField;
     var latencyBox;
     var testVal1Box;
     var testVal2Box;
@@ -104,6 +104,9 @@ PM_MIDI2OSCChannelView {
                 if(controller.notNil) {
                     controller.setName(field.string);
                 };
+            })
+            .keyUpAction_({|field|
+                controller.checkNameField();
             });
 
         view.decorator.nextLine;
@@ -229,6 +232,9 @@ PM_MIDI2OSCChannelView {
                 if(controller.notNil) {
                     controller.setIp(field.string);
                 };
+            })
+            .keyUpAction_({|field|
+                controller.checkIpField();
             });
 
         view.decorator.nextLine;
@@ -270,6 +276,9 @@ PM_MIDI2OSCChannelView {
                 if(controller.notNil) {
                     controller.setOscAddress(field.string);
                 };
+            })
+            .keyUpAction_({|field|
+                controller.checkOscAddressField();
             });
 
         view.decorator.nextLine;
