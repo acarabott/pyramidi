@@ -27,8 +27,11 @@ PM_MIDI2OSCChannelView {
     var <nameField;
     var enableButton;
     var deviceMenu;
+    var deviceMenuToggle;
     var midiChannelMenu;
+    var midiChannelMenuToggle;
     var midiMsgTypeMenu;
+    var midiMsgTypeMenuToggle;
     var midiMonitorText;
     var midiEnableMonitorButton;
     var <ipField;
@@ -136,12 +139,16 @@ PM_MIDI2OSCChannelView {
     }
 
     createMidiDeviceMenu {
-        StaticText(view, fullWidth@20)
-            .string_("MIDI Device")
-            .align_(\center);
-
+        view.decorator.left = view.decorator.left + 10;
+        deviceMenuToggle = Button(view, (fullWidth * 0.8)@20)
+            .states_([
+                ["MIDI Device", Color.black, Color.white],
+                ["MIDI Device", Color.white, Color.gray]
+            ])
+            .action_({|butt|
+                deviceMenu.enabled = butt.value == 0;
+            });
         view.decorator.nextLine;
-
         deviceMenu = PopUpMenu(view, fullWidth@20)
             .action_({|menu|
                 if(controller.notNil) {
@@ -154,10 +161,15 @@ PM_MIDI2OSCChannelView {
     }
 
     createMidiChannelMenu {
-        StaticText(view, fullWidth@20)
-            .string_("MIDI Channel")
-            .align_(\center);
-
+        view.decorator.left = view.decorator.left + 10;
+        deviceMenuToggle = Button(view, (fullWidth * 0.8)@20)
+            .states_([
+                ["MIDI Channel", Color.black, Color.white],
+                ["MIDI Channel", Color.white, Color.gray]
+            ])
+            .action_({|butt|
+                midiChannelMenu.enabled = butt.value == 0;
+            });
         view.decorator.nextLine;
 
         midiChannelMenu = PopUpMenu(view, fullWidth@20)
@@ -172,9 +184,16 @@ PM_MIDI2OSCChannelView {
     }
 
     createMidiMessageMenu {
-        StaticText(view, fullWidth@20)
-            .string_("MIDI Message")
-            .align_(\center);
+        view.decorator.left = view.decorator.left + 10;
+        deviceMenuToggle = Button(view, (fullWidth * 0.8)@20)
+            .states_([
+                ["MIDI Message", Color.black, Color.white],
+                ["MIDI Message", Color.white, Color.gray]
+            ])
+            .action_({|butt|
+                midiMsgTypeMenu.enabled = butt.value == 0;
+            });
+        view.decorator.nextLine;
 
         midiMsgTypeMenu = PopUpMenu(view, fullWidth@20)
             .action_({|menu|
