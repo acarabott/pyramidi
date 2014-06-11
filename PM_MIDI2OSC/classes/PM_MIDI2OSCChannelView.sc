@@ -259,6 +259,7 @@ PM_MIDI2OSCChannelView {
             .clipHi_(65535)
             .decimals_(0)
             .align_(\center)
+            .scroll_(false)
             .action_({ |box|
                 if(controller.notNil) {
                     controller.setPort(box.value.asInteger);
@@ -310,6 +311,7 @@ PM_MIDI2OSCChannelView {
             .decimals_(0)
             .clipLo_(0)
             .clipHi_(127)
+            .scroll_(false)
             .action_({|box|
                 if(controller.notNil) {
                     controller.setMapInputMin(box.value.asInteger);
@@ -321,6 +323,7 @@ PM_MIDI2OSCChannelView {
             .decimals_(0)
             .clipLo_(0)
             .clipHi_(127)
+            .scroll_(false)
             .action_({|box|
                 if(controller.notNil) {
                     controller.setMapInputMax(box.value.asInteger);
@@ -360,6 +363,7 @@ PM_MIDI2OSCChannelView {
         mapOutputMinBox = NumberBox(view, (fullWidth * 0.5) - (margin * 0.5)@20)
             .align_(\center)
             .decimals_(0)
+            .scroll_(false)
             .action_({|box|
                 if(controller.notNil) {
                     controller.setMapOutputMin(box.value.asInteger);
@@ -369,6 +373,7 @@ PM_MIDI2OSCChannelView {
         mapOutputMaxBox = NumberBox(view, (fullWidth * 0.5) - (margin * 0.5)@20)
             .align_(\center)
             .decimals_(0)
+            .scroll_(false)
             .action_({|box|
                 if(controller.notNil) {
                     controller.setMapOutputMax(box.value.asInteger);
@@ -392,6 +397,7 @@ PM_MIDI2OSCChannelView {
             .clipHi_(60)
             .decimals_(3)
             .align_(\center)
+            .scroll_(false)
             .action_({|box|
                 if(controller.notNil) {
                     controller.setLatency(box.value);
@@ -412,6 +418,7 @@ PM_MIDI2OSCChannelView {
         testVal1Box = NumberBox(view, (fullWidth * 0.5) - (margin * 0.5)@20)
             .align_(\center)
             .decimals_(0)
+            .scroll_(false)
             .action_({|box|
                 if(controller.notNil) {
                     controller.setTestVal1(box.value.asInteger);
@@ -421,6 +428,7 @@ PM_MIDI2OSCChannelView {
         testVal2Box = NumberBox(view, (fullWidth * 0.5) - (margin * 0.5)@20)
             .align_(\center)
             .decimals_(0)
+            .scroll_(false)
             .action_({|box|
                 if(controller.notNil) {
                     controller.setTestVal2(box.value.asInteger);
