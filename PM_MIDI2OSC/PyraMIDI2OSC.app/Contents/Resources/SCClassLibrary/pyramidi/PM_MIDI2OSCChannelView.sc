@@ -239,7 +239,12 @@ PM_MIDI2OSCChannelView {
     }
 
     updateMidiMonitor {|aString|
-        {midiMonitorText.string_(aString.asString)}.fork(AppClock);
+        {
+            midiMonitorText.string_(aString.asString);
+            midiMonitorText.background_(Color.green);
+            0.1.wait;
+            midiMonitorText.background_(Color.clear);
+        }.fork(AppClock);
 
         ^nil;
     }
