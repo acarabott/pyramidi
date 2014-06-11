@@ -21,6 +21,7 @@ PM_MIDI2OSC {
     var controllers;
     var views;
     var window;
+    var autoLoadPath;
     var <>clipboard;
 
     *new {
@@ -31,11 +32,17 @@ PM_MIDI2OSC {
         channels =      List[];
         controllers =   List[];
         views =         List[];
+        autoLoadPath =  Platform.resourceDir +/+ "autoLoad";
 
         this.createWindow;
         this.createAddButton;
         this.createSaveLoadButtons;
         this.createTitle;
+
+        if(File.exists(autoLoadPath)) {
+            var path = Object.readArchive(autoLoadPath);
+            this.readSettings(Object.readArchive(path));
+        };
     }
 
     createWindow {
@@ -118,6 +125,7 @@ PM_MIDI2OSC {
 
         Dialog.savePanel {|path|
             settings.writeArchive(path);
+            path.writeArchive(autoLoadPath);
         };
 
         ^nil;
@@ -125,11 +133,15 @@ PM_MIDI2OSC {
 
     loadAll {
         Dialog.openPanel {|path|
-            Object.readArchive(path).do {|setting|
-                setting.postln;
-                this.addChannel(setting['name']);
-                controllers.last.loadSettings(setting);
-            }
+            this.readSettings(Object.readArchive(path));
         };
+    }
+
+    readSettings {|object|
+        object.do {|setting|
+            setting.postln;
+            this.addChannel(setting['name']);
+            controllers.last.loadSettings(setting);
+        }
     }
 }
