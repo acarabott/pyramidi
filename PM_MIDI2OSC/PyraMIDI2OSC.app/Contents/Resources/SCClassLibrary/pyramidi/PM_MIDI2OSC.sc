@@ -20,6 +20,7 @@ PM_MIDI2OSC {
     var channels;
     var controllers;
     var views;
+    var groups;
     var window;
     var autoLoadPath;
     var <>clipboard;
@@ -32,6 +33,7 @@ PM_MIDI2OSC {
         channels =      List[];
         controllers =   List[];
         views =         List[];
+        groups =        IdentityDictionary[];
         autoLoadPath =  Platform.resourceDir +/+ "autoload";
 
         this.createWindow;
@@ -116,6 +118,18 @@ PM_MIDI2OSC {
         );
 
         controllers.last.parent = this;
+    }
+
+    addToGroup {|channel, group|
+        if(groups[group].isNil) {
+            groups[group] = List[];
+        };
+
+        groups[group].add(channel);
+    }
+
+    removeFromGroup {|channel|
+        groups[channel.group].remove(channel);
     }
 
     saveAll {

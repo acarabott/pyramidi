@@ -28,6 +28,7 @@ PM_MIDI2OSCChannel {
 
     var <name;
     var <enabled;
+    var <group;
     var midiFunc;
     var midiFuncCallback;
     var <midiChannel;
@@ -128,6 +129,7 @@ PM_MIDI2OSCChannel {
     midi2oscChannelInit {|aName|
         name =              aName;
         enabled =           true;
+        group =             nil;
         netAddr =           nil;
         latency =           0.0;
         midiFunc =          nil;
@@ -182,6 +184,21 @@ PM_MIDI2OSCChannel {
 
         this.notify(\debug, \set,
             "enabled:" + enabled
+        );
+
+        ^this;
+    }
+
+    group_ {|aGroup|
+        if(aGroup.isKindOf(Symbol).not) {
+            this.notify(\error, \group, "Not a symbol");
+            ^this;
+        };
+
+        group = aGroup;
+
+        this.notify(\debug, \set,
+            "group:" + group
         );
 
         ^this;

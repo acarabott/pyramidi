@@ -115,6 +115,14 @@ PM_MIDI2OSCChannelController {
         };
     }
 
+    checkGroupField {
+        if(channel.group.asSymbol != view.groupField.string.asSymbol) {
+            view.groupField.stringColor_(Color.red);
+        } {
+            view.groupField.stringColor_(Color.black);
+        };
+    }
+
     checkTextFields {
         this.checkNameField();
         this.checkIpField();
@@ -140,6 +148,19 @@ PM_MIDI2OSCChannelController {
     setEnabled {|aEnabled|
         channel.enabled = aEnabled;
         ^this;
+    }
+
+    addToGroup {|aKey|
+        channel.group = aKey;
+        parent.addToGroup(channel, aKey);
+        if(view.notNil) {
+            this.checkGroupField();
+        };
+        ^this;
+    }
+
+    removeFromGroups {
+        parent.removeFromGroup(channel);
     }
 
     getMidiSrcIDs {

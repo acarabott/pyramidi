@@ -26,6 +26,7 @@ PM_MIDI2OSCChannelView {
 
     var <nameField;
     var enableButton;
+    var <groupField;
     var deviceMenu;
     var deviceMenuToggle;
     var midiChannelMenu;
@@ -63,6 +64,7 @@ PM_MIDI2OSCChannelView {
         this.createView(aParentView);
         this.createNameField;
         this.createEnableButton;
+        this.createGroupField;
         this.createMidiDeviceMenu;
         this.createMidiChannelMenu;
         this.createMidiMessageMenu;
@@ -136,6 +138,32 @@ PM_MIDI2OSCChannelView {
 
         view.decorator.nextLine;
         ^nil
+    }
+
+    createGroupField {
+        StaticText(view, fullWidth@20)
+            .string_("Group")
+            .align_(\center);
+
+        view.decorator.nextLine;
+
+        groupField = TextField(view, viewWidth - (margin * 2)@20)
+            .align_(\center)
+            .action_({|field|
+                if(controller.notNil) {
+                    if(field.string.replace(" ", "").isEmpty) {
+                        controller.removeFromGroups();
+                    } {
+                        controller.addToGroup(field.string.asSymbol);
+                    };
+                };
+            })
+            .keyUpAction_({|field|
+                controller.checkGroupField();
+            });
+
+        view.decorator.nextLine;
+        ^nil;
     }
 
     createMidiDeviceMenu {
