@@ -342,6 +342,11 @@ PM_MIDI2OSCChannelController {
         ^channel.sendTestSignal;
     }
 
+    allNoteOff {
+        channel.allNoteOff();
+        ^nil;
+    }
+
     getSettings {
         ^channel.storedSettings;
     }
