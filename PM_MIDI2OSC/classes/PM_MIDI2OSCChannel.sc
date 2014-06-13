@@ -700,6 +700,22 @@ PM_MIDI2OSCChannel {
         ^this;
     }
 
+    allNoteOff {
+        if(netAddr.isNil) {
+            this.notify(\error, \test,
+                "ip address not set"
+            );
+            ^nil;
+        };
+
+        {
+            (1..127).do {|i|
+                netAddr.sendMsg(\noteOff, i, 0);
+                0.01.wait;
+            };
+        }.fork;
+    }
+
     controller_ {|aController|
         if(this.class.checkController(aController).not) {
             this.notify(\error, \controller,

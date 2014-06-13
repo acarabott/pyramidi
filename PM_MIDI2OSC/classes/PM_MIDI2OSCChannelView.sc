@@ -46,6 +46,7 @@ PM_MIDI2OSCChannelView {
     var testVal1Box;
     var testVal2Box;
     var testButton;
+    var allNoteOffButton;
     var copyButton;
     var pasteButton;
     var saveButton;
@@ -73,6 +74,7 @@ PM_MIDI2OSCChannelView {
         this.createMappingControls;
         this.createLatencyBox;
         this.createTestControls;
+        this.createAllNoteOffButton;
         this.createClipboardButtons;
         this.createSaveLoadButtons;
     }
@@ -470,6 +472,20 @@ PM_MIDI2OSCChannelView {
                 };
             });
 
+        view.decorator.nextLine;
+        ^nil;
+    }
+
+    createAllNoteOffButton {
+        allNoteOffButton = Button(view, fullWidth@20)
+            .states_([
+                ["All Notes Off", Color.white, Color.red]
+            ])
+            .action_({|butt|
+                if(controller.notNil) {
+                    controller.allNoteOff();
+                };
+            });
         view.decorator.nextLine;
         ^nil;
     }
