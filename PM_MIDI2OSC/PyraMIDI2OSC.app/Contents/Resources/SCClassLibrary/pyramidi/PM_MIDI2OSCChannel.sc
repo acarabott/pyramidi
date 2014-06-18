@@ -24,7 +24,6 @@ PM_MIDI2OSCChannel {
     classvar midiSrcLabels;
     classvar controllerMethods;
     classvar defaultPort;
-    classvar settingsKeys;
 
     var <name;
     var <enabled;
@@ -78,21 +77,6 @@ PM_MIDI2OSCChannel {
         ];
 
         defaultPort = 1234;
-
-        settingsKeys = #[
-            'name',
-            'enabled',
-            'midiChannel',
-            'midiMsgType',
-            'midiSrcID',
-            'midiNotifying',
-            'ip',
-            'port',
-            'oscAddress',
-            'latency',
-            'testVal1',
-            'testVal2'
-        ];
     }
 
     *new {|aName|
@@ -800,7 +784,7 @@ PM_MIDI2OSCChannel {
         };
 
         aSettings.keysValuesDo { |key, value|
-            if(settingsKeys.includes(key)) {
+            if(this.respondsTo(key)) {
                 this.perform((key ++ "_").asSymbol, value);
             };
         };
