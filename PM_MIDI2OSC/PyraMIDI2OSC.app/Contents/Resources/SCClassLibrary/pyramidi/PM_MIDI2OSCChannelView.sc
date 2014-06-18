@@ -153,10 +153,11 @@ PM_MIDI2OSCChannelView {
             ])
             .action_({|butt|
                 deviceMenu.enabled = butt.value == 0;
+                controller.setMidiSrcIDLocked(deviceMenu.enabled.not);
             });
 
         view.decorator.nextLine;
-        deviceMenu = PopUpMenu(view, (fullWidth * 0.9)@20)
+        deviceMenu = PopUpMenu(view, fullWidth@20)
             .action_({|menu|
                 if(controller.notNil) {
                     controller.setMidiSrc(menu.value);
@@ -172,13 +173,14 @@ PM_MIDI2OSCChannelView {
             .string_("MIDI Channel")
             .align_(\center);
 
-        deviceMenuToggle = Button(view, (fullWidth * 0.35)@20)
+        midiChannelMenuToggle = Button(view, (fullWidth * 0.35)@20)
             .states_([
                 ["Lock", Color.black, Color.white],
                 ["Unlock", Color.white, Color.gray]
             ])
             .action_({|butt|
                 midiChannelMenu.enabled = butt.value == 0;
+                controller.setMidiChannelLocked(midiChannelMenu.enabled.not);
             });
         view.decorator.nextLine;
 
@@ -199,13 +201,14 @@ PM_MIDI2OSCChannelView {
             .string_("MIDI Message")
             .align_(\center);
 
-        deviceMenuToggle = Button(view, (fullWidth * 0.35)@20)
+        midiMsgTypeMenuToggle = Button(view, (fullWidth * 0.35)@20)
             .states_([
                 ["Lock", Color.black, Color.white],
                 ["Unlock", Color.white, Color.gray]
             ])
             .action_({|butt|
                 midiMsgTypeMenu.enabled = butt.value == 0;
+                controller.setMidiMsgTypeLocked(midiMsgTypeMenu.enabled.not);
             });
         view.decorator.nextLine;
 
@@ -574,10 +577,16 @@ PM_MIDI2OSCChannelView {
             enableButton.value =            if(controller.getEnabled, 1, 0);
             deviceMenu.items =              controller.getMidiSrcLabels;
             deviceMenu.value =              controller.getMidiSrcIndex;
+            deviceMenu.enabled =            controller.getMidiSrcIDLocked.not;
+            deviceMenuToggle.value =        if(deviceMenu.enabled, 0, 1);
             midiChannelMenu.items =         controller.getMidiChannelLabels;
             midiChannelMenu.value =         controller.getMidiChannelIndex;
+            midiChannelMenu.enabled =       controller.getMidiChannelLocked.not;
+            midiChannelMenuToggle.value =   if(midiChannelMenu.enabled, 0, 1);
             midiMsgTypeMenu.items =         controller.getMidiMsgTypes;
             midiMsgTypeMenu.value =         controller.getMidiMsgTypeIndex;
+            midiMsgTypeMenu.enabled =       controller.getMidiMsgTypeLocked.not;
+            midiMsgTypeMenuToggle.value =   if(midiMsgTypeMenu.enabled, 0, 1);
             midiEnableMonitorButton.value = if(controller.getMidiNotifying,1,0);
             ipField.string =                controller.getIp;
             portBox.value =                 controller.getPort;

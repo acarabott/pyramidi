@@ -159,6 +159,15 @@ PM_MIDI2OSCChannelController {
         ^this;
     }
 
+    getMidiSrcIDLocked {
+        ^channel.midiSrcIDLocked;
+    }
+
+    setMidiSrcIDLocked {|aMidiSrcIDLocked|
+        channel.midiSrcIDLocked = aMidiSrcIDLocked;
+        ^this;
+    }
+
     getMidiChannels {
         ^channel.midiChannels;
     }
@@ -182,6 +191,15 @@ PM_MIDI2OSCChannelController {
         ^channel.midiChannels.indexOf(channel.midiChannel);
     }
 
+    setMidiChannelLocked {|aMidiChannelLocked|
+        channel.midiChannelLocked = aMidiChannelLocked;
+        ^this;
+    }
+
+    getMidiChannelLocked {
+        ^channel.midiChannelLocked;
+    }
+
     getMidiMsgTypes {
         ^channel.midiMsgTypes;
     }
@@ -197,6 +215,15 @@ PM_MIDI2OSCChannelController {
 
     getMidiMsgTypeIndex {
         ^channel.midiMsgTypes.indexOf(channel.midiMsgType);
+    }
+
+    setMidiMsgTypeLocked {|aMidiMsgTypeLocked|
+        channel.midiMsgTypeLocked = aMidiMsgTypeLocked;
+        ^this;
+    }
+
+    getMidiMsgTypeLocked {
+        ^channel.midiMsgTypeLocked;
     }
 
     getMidiNonNumTypes {

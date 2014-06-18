@@ -29,11 +29,13 @@ PM_MIDI2OSCChannel {
     var <enabled;
     var midiFunc;
     var midiFuncCallback;
-    var <midiChannel;
-    var <midiMsgType;
     var <midiSrcID;
+    var <>midiSrcIDLocked;
+    var <midiChannel;
+    var <>midiChannelLocked;
+    var <midiMsgType;
+    var <>midiMsgTypeLocked;
     var <midiNotifying;
-
     var ip;
     var port;
     var netAddr;
@@ -115,9 +117,12 @@ PM_MIDI2OSCChannel {
         netAddr =           nil;
         latency =           0.0;
         midiFunc =          nil;
-        midiChannel =       nil;
-        midiMsgType =       \noteOn;
         midiSrcID =         nil; // nil responds to all
+        midiSrcIDLocked =   false;
+        midiChannel =       nil;
+        midiChannelLocked = false;
+        midiMsgType =       \noteOn;
+        midiMsgTypeLocked = false;
         midiNotifying =     false;
         oscAddress =        "/" ++ midiMsgType;
         port =              defaultPort;
@@ -758,9 +763,12 @@ PM_MIDI2OSCChannel {
     storeSettings {
         storedSettings['name'] = name;
         storedSettings['enabled'] = enabled;
-        storedSettings['midiChannel'] = midiChannel;
-        storedSettings['midiMsgType'] = midiMsgType;
         storedSettings['midiSrcID'] = midiSrcID;
+        storedSettings['midiSrcIDLocked'] = midiSrcIDLocked;
+        storedSettings['midiChannel'] = midiChannel;
+        storedSettings['midiChannelLocked'] = midiChannelLocked;
+        storedSettings['midiMsgType'] = midiMsgType;
+        storedSettings['midiMsgTypeLocked'] = midiMsgTypeLocked;
         storedSettings['midiNotifying'] = midiNotifying;
         storedSettings['ip'] = ip;
         storedSettings['port'] = port;
