@@ -142,10 +142,12 @@ PM_MIDI2OSC {
     }
 
     readSettings {|object|
-        object.do {|setting|
-            setting.postln;
-            this.addChannel(setting['name']);
-            controllers.last.loadSettings(setting);
+        object.do {|settings|
+            settings.keysValuesDo {|k, v|
+                Post << k << ": " << v << Char.nl;
+            };
+            this.addChannel(settings['name']);
+            controllers.last.loadSettings(settings);
         }
     }
 }
