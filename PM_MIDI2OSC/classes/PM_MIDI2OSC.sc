@@ -41,7 +41,11 @@ PM_MIDI2OSC {
 
         if(File.exists(autoLoadPath)) {
             var path = Object.readArchive(autoLoadPath);
-            this.readSettings(Object.readArchive(path));
+            if(File.exists(path)) {
+                this.readSettings(Object.readArchive(path));
+            } {
+                Post << "WARNING: autoload file doesn't exist" << Char.nl;
+            };
         };
     }
 
