@@ -57,7 +57,7 @@ PM_MIDI2OSCChannelView {
     }
 
     midi2oscChannelViewInit {|aParentView|
-        viewWidth =         150;
+        viewWidth =         170;
         margin =            4;
         fullWidth =         viewWidth - (margin * 2);
 
@@ -142,32 +142,40 @@ PM_MIDI2OSCChannelView {
 
     createMidiDeviceMenu {
         view.decorator.left = view.decorator.left + 10;
-        deviceMenuToggle = Button(view, (fullWidth * 0.8)@20)
+        StaticText(view, (fullWidth * 0.55)@20)
+            .string_("MIDI Device")
+            .align_(\center);
+
+        deviceMenuToggle = Button(view, (fullWidth * 0.35)@20)
             .states_([
-                ["MIDI Device", Color.black, Color.white],
-                ["MIDI Device", Color.white, Color.gray]
+                ["Lock", Color.black, Color.white],
+                ["Unlock", Color.white, Color.gray]
             ])
             .action_({|butt|
                 deviceMenu.enabled = butt.value == 0;
             });
+
         view.decorator.nextLine;
-        deviceMenu = PopUpMenu(view, fullWidth@20)
+        deviceMenu = PopUpMenu(view, (fullWidth * 0.9)@20)
             .action_({|menu|
                 if(controller.notNil) {
                     controller.setMidiSrc(menu.value);
                 };
             });
-
         view.decorator.nextLine;
         ^nil
     }
 
     createMidiChannelMenu {
         view.decorator.left = view.decorator.left + 10;
-        deviceMenuToggle = Button(view, (fullWidth * 0.8)@20)
+        StaticText(view, (fullWidth * 0.55)@20)
+            .string_("MIDI Channel")
+            .align_(\center);
+
+        deviceMenuToggle = Button(view, (fullWidth * 0.35)@20)
             .states_([
-                ["MIDI Channel", Color.black, Color.white],
-                ["MIDI Channel", Color.white, Color.gray]
+                ["Lock", Color.black, Color.white],
+                ["Unlock", Color.white, Color.gray]
             ])
             .action_({|butt|
                 midiChannelMenu.enabled = butt.value == 0;
@@ -187,10 +195,14 @@ PM_MIDI2OSCChannelView {
 
     createMidiMessageMenu {
         view.decorator.left = view.decorator.left + 10;
-        deviceMenuToggle = Button(view, (fullWidth * 0.8)@20)
+        StaticText(view, (fullWidth * 0.55)@20)
+            .string_("MIDI Message")
+            .align_(\center);
+
+        deviceMenuToggle = Button(view, (fullWidth * 0.35)@20)
             .states_([
-                ["MIDI Message", Color.black, Color.white],
-                ["MIDI Message", Color.white, Color.gray]
+                ["Lock", Color.black, Color.white],
+                ["Unlock", Color.white, Color.gray]
             ])
             .action_({|butt|
                 midiMsgTypeMenu.enabled = butt.value == 0;
