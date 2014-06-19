@@ -45,12 +45,6 @@ PM_MIDI2OSCChannelView {
     var latencyBox;
     var testVal1Box;
     var testVal2Box;
-    var testButton;
-    var allNoteOffButton;
-    var copyButton;
-    var pasteButton;
-    var saveButton;
-    var loadButton;
 
     *new {|aParentView|
         ^super.new.midi2oscChannelViewInit(aParentView);
@@ -77,6 +71,7 @@ PM_MIDI2OSCChannelView {
         this.createAllNoteOffButton;
         this.createClipboardButtons;
         this.createSaveLoadButtons;
+        this.createRemoveButton;
     }
 
     createView {|aParentView|
@@ -477,7 +472,8 @@ PM_MIDI2OSCChannelView {
             });
 
         view.decorator.nextLine;
-        testButton = Button(view, fullWidth@20)
+
+        Button(view, fullWidth@20)
             .states_([
                 ["Test", Color.black, Color.white]
             ])
@@ -492,7 +488,7 @@ PM_MIDI2OSCChannelView {
     }
 
     createAllNoteOffButton {
-        allNoteOffButton = Button(view, fullWidth@20)
+        Button(view, fullWidth@20)
             .states_([
                 ["All Notes Off", Color.white, Color.red]
             ])
@@ -507,7 +503,8 @@ PM_MIDI2OSCChannelView {
 
     createClipboardButtons {
         view.decorator.top = view.decorator.top + 20;
-        copyButton = Button(view, fullWidth@20)
+
+        Button(view, fullWidth@20)
             .states_([
                 ["Copy Channel", Color.white, Color.black]
             ])
@@ -519,7 +516,7 @@ PM_MIDI2OSCChannelView {
 
         view.decorator.nextLine;
 
-        pasteButton = Button(view, fullWidth@20)
+        Button(view, fullWidth@20)
             .states_([
                 ["Paste Channel", Color.black, Color.yellow]
             ])
@@ -536,7 +533,7 @@ PM_MIDI2OSCChannelView {
     createSaveLoadButtons {
         view.decorator.top = view.decorator.top + 20;
 
-        saveButton = Button(view, fullWidth@20)
+        Button(view, fullWidth@20)
             .states_([
                 ["Save Channel", Color.black, Color.white]
             ])
@@ -546,7 +543,7 @@ PM_MIDI2OSCChannelView {
 
         view.decorator.nextLine;
 
-        loadButton = Button(view, fullWidth@20)
+        Button(view, fullWidth@20)
             .states_([
                 ["Load Channel", Color.white, Color.black]
             ])
@@ -556,6 +553,12 @@ PM_MIDI2OSCChannelView {
 
         view.decorator.nextLine;
         ^nil;
+    }
+
+    createRemoveButton {
+        view.decorator.top = view.decorator.top + 20;
+
+
     }
 
     controller_ {|aController|
