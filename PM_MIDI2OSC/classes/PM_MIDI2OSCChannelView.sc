@@ -17,7 +17,7 @@ along with PyraMIDI2OSC.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 PM_MIDI2OSCChannelView {
-    var view;
+    var <view;
     var viewWidth;
     var margin;
     var fullWidth;
@@ -77,18 +77,7 @@ PM_MIDI2OSCChannelView {
     }
 
     createView {|aParentView|
-        if([View.implClass, Window.implClass].includes(aParentView.class).not &&
-            aParentView.notNil) {
-
-            controller.error(\view,
-                "parent view should be a Window, View or nil"
-            );
-
-            // Default to nil, use own window
-            aParentView = nil;
-        };
-
-        view = View(aParentView, viewWidth@830);
+        view = View(aParentView, viewWidth@890);
         view.addFlowLayout;
         view.decorator.margin.x = margin;
         view.decorator.margin.y = margin;
@@ -504,7 +493,7 @@ PM_MIDI2OSCChannelView {
     }
 
     createClipboardButtons {
-        view.decorator.top = view.decorator.top + 20;
+        view.decorator.top = view.decorator.top + 10;
 
         Button(view, standardSize)
             .states_([
@@ -533,7 +522,7 @@ PM_MIDI2OSCChannelView {
     }
 
     createSaveLoadButtons {
-        view.decorator.top = view.decorator.top + 20;
+        view.decorator.top = view.decorator.top + 10;
 
         Button(view, standardSize)
             .states_([
@@ -558,9 +547,46 @@ PM_MIDI2OSCChannelView {
     }
 
     createRemoveButton {
-        view.decorator.top = view.decorator.top + 20;
+        var remove, confirm, cancel;
+        view.decorator.top = view.decorator.top + 10;
 
-        Button(view, standardSize)
+        remove = Button(view, standardSize)
+            .states_([
+                ["Remove Channel", Color.white, Color.red]
+            ])
+            .action_({|butt|
+                remove.visible =    false;
+                confirm.visible =   true;
+                cancel.visible =    true;
+            });
+
+        cancel = Button(view, (fullWidth * 0.5) - margin@20)
+            .states_([
+                ["Cancel", Color.black, Color.white]
+            ])
+            .action_({|butt|
+                remove.visible =    true;
+                confirm.visible =   false;
+                cancel.visible =    false;
+            })
+            .visible_(false);
+
+        confirm = Button(view, (fullWidth * 0.5) - margin@20)
+            .states_([
+                ["Confirm", Color.black, Color.yellow]
+            ])
+            .action_({|butt|
+                remove.visible =    true;
+                confirm.visible =   false;
+                cancel.visible =    false;
+
+                controller.removeChannel;
+                view.remove;
+            })
+            .visible_(false);
+
+
+        view.decorator.nextLine;
     }
 
     controller_ {|aController|

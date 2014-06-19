@@ -17,10 +17,11 @@ along with PyraMIDI2OSC.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 PM_MIDI2OSC {
-    var channels;
-    var controllers;
-    var views;
-    var window;
+    var <channels;
+    var <controllers;
+    var <views;
+    var <window;
+    var menuHeight;
     var autoLoadPath;
     var <>clipboard;
 
@@ -33,6 +34,7 @@ PM_MIDI2OSC {
         controllers =   List[];
         views =         List[];
         autoLoadPath =  Platform.resourceDir +/+ "autoload";
+        menuHeight =    70;
 
         this.createWindow;
         this.createAddButton;
@@ -50,9 +52,10 @@ PM_MIDI2OSC {
 
     createWindow {
         var width =     1260;
-        var height =    900;
+        var height =    960;
         var x =         (Window.screenBounds.width - width) * 0.5;
         var y =         (Window.screenBounds.height - height) * 0.5;
+        var m =         4;
 
         window = Window(scroll:true)
             .name_("Pyramidi MIDI to OSC")
@@ -66,12 +69,25 @@ PM_MIDI2OSC {
             .front;
 
         window.addFlowLayout;
+        window.view.decorator.margin.x = m;
+        window.view.decorator.margin.y = m;
 
         ^this;
     }
 
+    relayout {
+        var mx = window.view.decorator.margin.x;
+        var my = window.view.decorator.margin.y;
+
+        window.view.decorator.left = mx;
+        window.view.decorator.top = menuHeight + (my * 2);
+        views.do({|widget|
+            window.view.decorator.place(widget.view);
+        });
+    }
+
     createAddButton {
-        Button(window, 70@70)
+        Button(window, menuHeight@menuHeight)
             .font_(Font.default.size = 40)
             .states_([
                 ["+", Color.white, Color.black]
@@ -84,7 +100,7 @@ PM_MIDI2OSC {
     }
 
     createSaveLoadButtons {
-        Button(window, 140@70)
+        Button(window, 140@menuHeight)
             .font_(Font.default.size = 30)
             .states_([
                 ["Save All", Color.black, Color.white],
@@ -92,7 +108,7 @@ PM_MIDI2OSC {
             .action_({|butt|
                 this.saveAll;
             });
-        Button(window, 140@70)
+        Button(window, 140@menuHeight)
             .font_(Font.default.size = 30)
             .states_([
                 ["Load All", Color.white, Color.black],
@@ -103,7 +119,7 @@ PM_MIDI2OSC {
     }
 
     createTitle {
-        StaticText(window, 500@70)
+        StaticText(window, 500@menuHeight)
             .align_(\right)
             .string_("Pyramidi MIDI to OSC")
             .font_(Font.default.size = 40);
@@ -121,6 +137,13 @@ PM_MIDI2OSC {
         controllers.last.parent = this;
     }
 
+    removeChannel {|channel, view, controller|
+        channels.remove(channel);
+        views.remove(view);
+        controllers.remove(controller);
+
+        this.relayout();
+    }
 
     getAllSettings {
         ^controllers.collect {|controller|

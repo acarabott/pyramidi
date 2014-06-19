@@ -422,6 +422,10 @@ PM_MIDI2OSCChannelController {
         ^nil;
     }
 
+    removeChannel {
+        parent.removeChannel(channel, view, this);
+    }
+
     error {|key, string|
 
         switch (key)
