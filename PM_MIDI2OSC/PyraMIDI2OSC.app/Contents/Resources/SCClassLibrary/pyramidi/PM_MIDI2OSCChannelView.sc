@@ -581,7 +581,6 @@ PM_MIDI2OSCChannelView {
                 cancel.visible =    false;
 
                 controller.removeChannel;
-                view.remove;
             })
             .visible_(false);
 

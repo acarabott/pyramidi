@@ -427,7 +427,12 @@ PM_MIDI2OSCChannelController {
         ^nil;
     }
 
+    removeView {
+        view.view.remove;
+    }
+
     removeChannel {
+        this.removeView();
         parent.removeChannel(channel, view, this);
     }
 

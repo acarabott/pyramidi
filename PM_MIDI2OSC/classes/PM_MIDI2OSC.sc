@@ -42,7 +42,10 @@ PM_MIDI2OSC {
         this.createSaveLoadButtons;
         this.createTitle;
         this.createRefreshButton;
-        window.view.decorator.nextLine;
+        this.createRemoveAllButtons;
+        window.view.decorator.left = window.view.decorator.margin.x;
+        window.view.decorator.top = menuHeight
+            + (window.view.decorator.margin.y * 2);
 
         if(File.exists(autoLoadPath)) {
             this.readSettings(Object.readArchive(autoLoadPath));
@@ -149,6 +152,50 @@ PM_MIDI2OSC {
             });
     }
 
+    createRemoveAllButtons {
+        var margin;
+        var remove, cancel, confirm;
+        margin = window.view.decorator.margin.x;
+
+        window.view.decorator.left = margin;
+        window.view.decorator.top = (menuHeight * 0.5) + (margin * 2);
+
+        remove = Button(window, 140@(menuHeight * 0.5))
+            .font_(Font.default.size = 20)
+            .states_([
+                ["Remove All", Color.white, Color.red]
+            ])
+            .action_({|butt|
+                remove.visible =    false;
+                cancel.visible =    true;
+                confirm.visible =   true;
+            });
+        cancel = Button(window, 90@(menuHeight * 0.5))
+            .font_(Font.default.size = 20)
+            .states_([
+                ["Cancel", Color.black, Color.white]
+            ])
+            .action_({|butt|
+                remove.visible =    true;
+                cancel.visible =    false;
+                confirm.visible =   false;
+            })
+            .visible_(false);
+        confirm = Button(window, 90@(menuHeight * 0.5))
+            .font_(Font.default.size = 20)
+            .states_([
+                ["Confirm", Color.black, Color.yellow]
+            ])
+            .action_({|butt|
+                remove.visible =    true;
+                cancel.visible =    false;
+                confirm.visible =   false;
+
+                this.removeAll();
+            })
+            .visible_(false);
+    }
+
     addChannel {|name|
         channels.add(PM_MIDI2OSCChannel(name));
         views.add(PM_MIDI2OSCChannelView(window));
@@ -165,6 +212,17 @@ PM_MIDI2OSC {
         controllers.remove(controller);
 
         this.relayout();
+    }
+
+    removeAll {
+        controllers.do {|controller|
+            controller.removeView();
+        };
+        channels.clear();
+        views.clear();
+        controllers.clear();
+
+        this.relayout;
     }
 
     getAllSettings {
