@@ -24,6 +24,7 @@ PM_MIDI2OSCChannelView {
 
     var <controller;
 
+    var standardSize;
     var <nameField;
     var enableButton;
     var deviceMenu;
@@ -54,6 +55,7 @@ PM_MIDI2OSCChannelView {
         viewWidth =         170;
         margin =            4;
         fullWidth =         viewWidth - (margin * 2);
+        standardSize =      fullWidth@20;
 
         this.createView(aParentView);
         this.createNameField;
@@ -120,7 +122,7 @@ PM_MIDI2OSCChannelView {
     }
 
     createEnableButton {
-        enableButton = Button(view, fullWidth@20)
+        enableButton = Button(view, standardSize)
             .states_([
                 ["off", Color.black, Color.red],
                 ["on", Color.black, Color.green]
@@ -152,7 +154,7 @@ PM_MIDI2OSCChannelView {
             });
 
         view.decorator.nextLine;
-        deviceMenu = PopUpMenu(view, fullWidth@20)
+        deviceMenu = PopUpMenu(view, standardSize)
             .action_({|menu|
                 if(controller.notNil) {
                     controller.setMidiSrc(menu.value);
@@ -179,7 +181,7 @@ PM_MIDI2OSCChannelView {
             });
         view.decorator.nextLine;
 
-        midiChannelMenu = PopUpMenu(view, fullWidth@20)
+        midiChannelMenu = PopUpMenu(view, standardSize)
             .action_({|menu|
                 if(controller.notNil) {
                     controller.setMidiChannelFromIndex(menu.value);
@@ -207,7 +209,7 @@ PM_MIDI2OSCChannelView {
             });
         view.decorator.nextLine;
 
-        midiMsgTypeMenu = PopUpMenu(view, fullWidth@20)
+        midiMsgTypeMenu = PopUpMenu(view, standardSize)
             .action_({|menu|
                 if(controller.notNil) {
                     var sym = menu.item.asSymbol;
@@ -225,7 +227,7 @@ PM_MIDI2OSCChannelView {
     }
 
     createMidiMonitor {
-        StaticText(view, fullWidth@20)
+        StaticText(view, standardSize)
             .string_("MIDI Monitor")
             .align_(\center);
 
@@ -262,7 +264,7 @@ PM_MIDI2OSCChannelView {
     }
 
     createIpField {
-        StaticText(view, fullWidth@20)
+        StaticText(view, standardSize)
             .string_("Destination IP")
             .align_(\center);
 
@@ -284,13 +286,13 @@ PM_MIDI2OSCChannelView {
     }
 
     createPortBox {
-        StaticText(view, fullWidth@20)
+        StaticText(view, standardSize)
             .string_("Destination Port")
             .align_(\center);
 
         view.decorator.nextLine;
 
-        portBox = NumberBox(view, fullWidth@20)
+        portBox = NumberBox(view, standardSize)
             .clipLo_(0)
             .clipHi_(65535)
             .decimals_(0)
@@ -307,13 +309,13 @@ PM_MIDI2OSCChannelView {
     }
 
     createOscAddressField {
-        StaticText(view, fullWidth@20)
+        StaticText(view, standardSize)
             .string_("OSC Address")
             .align_(\center);
 
         view.decorator.nextLine;
 
-        oscAddressField = TextField(view, fullWidth@20)
+        oscAddressField = TextField(view, standardSize)
             .align_(\center)
             .action_({|field|
                 if(controller.notNil) {
@@ -329,14 +331,14 @@ PM_MIDI2OSCChannelView {
     }
 
     createMappingControls {
-        StaticText(view, fullWidth@20)
+        StaticText(view, standardSize)
             .string_("Value Mapping")
             .font_(Font.default.size_(15).boldVariant)
             .align_(\center);
 
         view.decorator.nextLine;
 
-        StaticText(view, fullWidth@20)
+        StaticText(view, standardSize)
             .string_("Input")
             .align_(\center);
 
@@ -366,13 +368,13 @@ PM_MIDI2OSCChannelView {
                 };
             });
 
-        StaticText(view, fullWidth@20)
+        StaticText(view, standardSize)
             .string_("Output")
             .align_(\center);
 
         view.decorator.nextLine;
 
-        outputTypeButton = Button(view, fullWidth@20)
+        outputTypeButton = Button(view, standardSize)
             .states_([
                 ["Integer", Color.black, Color.white],
                 ["Float", Color.white, Color.black]
@@ -422,13 +424,13 @@ PM_MIDI2OSCChannelView {
     }
 
     createLatencyBox {
-        StaticText(view, fullWidth@20)
+        StaticText(view, standardSize)
             .string_("Latency")
             .align_(\center);
 
         view.decorator.nextLine;
 
-        latencyBox = NumberBox(view, fullWidth@20)
+        latencyBox = NumberBox(view, standardSize)
             .clipLo_(0)
             .clipHi_(60)
             .decimals_(3)
@@ -445,7 +447,7 @@ PM_MIDI2OSCChannelView {
     }
 
     createTestControls {
-        StaticText(view, fullWidth@20)
+        StaticText(view, standardSize)
             .string_("Send test message")
             .align_(\center);
 
@@ -473,7 +475,7 @@ PM_MIDI2OSCChannelView {
 
         view.decorator.nextLine;
 
-        Button(view, fullWidth@20)
+        Button(view, standardSize)
             .states_([
                 ["Test", Color.black, Color.white]
             ])
@@ -488,7 +490,7 @@ PM_MIDI2OSCChannelView {
     }
 
     createAllNoteOffButton {
-        Button(view, fullWidth@20)
+        Button(view, standardSize)
             .states_([
                 ["All Notes Off", Color.white, Color.red]
             ])
@@ -504,7 +506,7 @@ PM_MIDI2OSCChannelView {
     createClipboardButtons {
         view.decorator.top = view.decorator.top + 20;
 
-        Button(view, fullWidth@20)
+        Button(view, standardSize)
             .states_([
                 ["Copy Channel", Color.white, Color.black]
             ])
@@ -516,7 +518,7 @@ PM_MIDI2OSCChannelView {
 
         view.decorator.nextLine;
 
-        Button(view, fullWidth@20)
+        Button(view, standardSize)
             .states_([
                 ["Paste Channel", Color.black, Color.yellow]
             ])
@@ -533,7 +535,7 @@ PM_MIDI2OSCChannelView {
     createSaveLoadButtons {
         view.decorator.top = view.decorator.top + 20;
 
-        Button(view, fullWidth@20)
+        Button(view, standardSize)
             .states_([
                 ["Save Channel", Color.black, Color.white]
             ])
@@ -543,7 +545,7 @@ PM_MIDI2OSCChannelView {
 
         view.decorator.nextLine;
 
-        Button(view, fullWidth@20)
+        Button(view, standardSize)
             .states_([
                 ["Load Channel", Color.white, Color.black]
             ])
@@ -558,7 +560,7 @@ PM_MIDI2OSCChannelView {
     createRemoveButton {
         view.decorator.top = view.decorator.top + 20;
 
-
+        Button(view, standardSize)
     }
 
     controller_ {|aController|
