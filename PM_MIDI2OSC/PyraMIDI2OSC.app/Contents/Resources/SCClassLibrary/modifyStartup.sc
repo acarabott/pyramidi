@@ -49,9 +49,9 @@
 
 		StartUp.run;
 
-		Document.listener.close;
+		// Document.listener.close;
 
-		PM_MIDI2OSC();
+		~pyramidi = PM_MIDI2OSC();
 	}
 
 }
