@@ -40,13 +40,12 @@ PM_MIDI2OSC {
         this.createTitle;
 
         if(File.exists(autoLoadPath)) {
-            var path = Object.readArchive(autoLoadPath);
-            if(File.exists(path)) {
-                this.readSettings(Object.readArchive(path));
-            } {
-                Post << "WARNING: autoload file doesn't exist" << Char.nl;
-            };
+            this.readSettings(Object.readArchive(autoLoadPath));
         };
+
+        ShutDown.add({
+            this.getAllSettings.writeArchive(autoLoadPath);
+        });
     }
 
     createWindow {
@@ -122,14 +121,19 @@ PM_MIDI2OSC {
         controllers.last.parent = this;
     }
 
-    saveAll {
-        var settings = controllers.collect {|controller|
-            controller.getSettings
+
+    getAllSettings {
+        ^controllers.collect {|controller|
+            controller.getSettings;
         };
+    }
+
+    saveAll {
+        var settings = this.getAllSettings();
 
         Dialog.savePanel {|path|
             settings.writeArchive(path);
-            path.writeArchive(autoLoadPath);
+            settings.writeArchive(autoLoadPath);
         };
 
         ^nil;
