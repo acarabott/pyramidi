@@ -176,25 +176,31 @@ PM_MIDI2OSCChannel {
         ^this;
     }
 
-    initMidi {
-        if(MIDIClient.initialized.not) {
-            MIDIClient.init;
-            MIDIIn.connectAll;
-        };
+    createMidiSrcs {
+        ^[nil] ++ MIDIClient.sources.collect (_.uid);
+    }
 
+    createMidiSrcLabels {
+        ^["all"] ++ MIDIClient.sources.collect (_.device + ":" + _.name);
+    }
+
+    initMidi {
         if(midiSrcIDs.isNil) {
-            midiSrcIDs = [nil] ++ MIDIClient.sources.collect (_.uid);
+            midiSrcIDs = this.createMidiSrcs();
         };
         if(midiSrcLabels.isNil) {
-            midiSrcLabels = ["all"] ++ MIDIClient.sources.collect (
-                _.device + ":" + _.name;
-            );
+            midiSrcLabels = this.createMidiSrcLabels();
         };
 
         this.createMidiFuncCallback;
         this.createMidiFunc;
 
         ^this;
+    }
+
+    refreshMidiSrcs {
+        midiSrcIDs = this.createMidiSrcs();
+        midiSrcLabels = this.createMidiSrcLabels();
     }
 
     midiSrcIDs {

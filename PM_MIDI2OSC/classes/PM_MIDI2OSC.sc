@@ -36,10 +36,13 @@ PM_MIDI2OSC {
         autoLoadPath =  Platform.resourceDir +/+ "autoload";
         menuHeight =    70;
 
+        this.initMidi;
         this.createWindow;
         this.createAddButton;
         this.createSaveLoadButtons;
         this.createTitle;
+        this.createRefreshButton;
+        window.view.decorator.nextLine;
 
         if(File.exists(autoLoadPath)) {
             this.readSettings(Object.readArchive(autoLoadPath));
@@ -48,6 +51,11 @@ PM_MIDI2OSC {
         ShutDown.add({
             this.getAllSettings.writeArchive(autoLoadPath);
         });
+    }
+
+    initMidi {
+        MIDIClient.init;
+        MIDIIn.connectAll;
     }
 
     createWindow {
@@ -87,8 +95,8 @@ PM_MIDI2OSC {
     }
 
     createAddButton {
-        Button(window, menuHeight@menuHeight)
-            .font_(Font.default.size = 40)
+        Button(window, menuHeight@(menuHeight * 0.5))
+            .font_(Font.default.size = 30)
             .states_([
                 ["+", Color.white, Color.black]
             ])
@@ -100,16 +108,16 @@ PM_MIDI2OSC {
     }
 
     createSaveLoadButtons {
-        Button(window, 140@menuHeight)
-            .font_(Font.default.size = 30)
+        Button(window, 140@(menuHeight * 0.5))
+            .font_(Font.default.size = 20)
             .states_([
                 ["Save All", Color.black, Color.white],
             ])
             .action_({|butt|
                 this.saveAll;
             });
-        Button(window, 140@menuHeight)
-            .font_(Font.default.size = 30)
+        Button(window, 140@(menuHeight * 0.5))
+            .font_(Font.default.size = 20)
             .states_([
                 ["Load All", Color.white, Color.black],
             ])
@@ -119,12 +127,26 @@ PM_MIDI2OSC {
     }
 
     createTitle {
+        window.view.decorator.left = window.view.decorator.left + 40;
         StaticText(window, 500@menuHeight)
             .align_(\right)
             .string_("Pyramidi MIDI to OSC")
             .font_(Font.default.size = 40);
+        window.view.decorator.left = window.view.decorator.left + 40;
+    }
 
-        window.view.decorator.nextLine;
+    createRefreshButton {
+        Button(window, 200@(menuHeight * 0.5))
+            .font_(Font.default.size = 20)
+            .states_([
+                ["Refresh MIDI", Color.white, Color.black],
+            ])
+            .action_({|butt|
+                this.initMidi();
+                controllers.do {|controller|
+                    controller.refreshMidiSrcs();
+                }
+            });
     }
 
     addChannel {|name|

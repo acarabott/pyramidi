@@ -142,6 +142,11 @@ PM_MIDI2OSCChannelController {
         ^this;
     }
 
+    refreshMidiSrcs {
+        channel.refreshMidiSrcs;
+        view.update();
+    }
+
     getMidiSrcIDs {
         ^channel.midiSrcIDs;
     }
